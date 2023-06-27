@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -189,7 +191,12 @@ public class ClienteService {
 
 	public Cliente update(Cliente newCliente, Long uniqueId) {
 		return repository.findByUniqueId(uniqueId).map(cliente -> {
-			cliente = new Cliente(newCliente.getClienteId(), newCliente.getFechaAlta(), newCliente.getUniqueId(),
+			try {
+				log.debug("Cliente 1 -> " + JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(newCliente));
+			} catch (JsonProcessingException e) {
+				log.debug("Sin cliente");
+			}
+			cliente = new Cliente(uniqueId, newCliente.getClienteId(), newCliente.getFechaAlta(),
 					newCliente.getFechaBaja(), newCliente.getApellido(), newCliente.getNombre(),
 					newCliente.getNumeroSocio(), newCliente.getInmuebleCalle(), newCliente.getInmueblePuerta(),
 					newCliente.getInmueblePiso(), newCliente.getInmuebleDpto(), newCliente.getInmuebleLocalidad(),
@@ -201,8 +208,17 @@ public class ClienteService {
 					newCliente.getRuta(), newCliente.getOrden(), newCliente.getCortado(), newCliente.getEstadoId(),
 					newCliente.getFechaNacimiento(), newCliente.getCategoriasocioId(), newCliente.getDestinoId(),
 					newCliente.getUid());
-			repository.save(cliente);
-			log.debug("Cliente -> " + cliente.toString());
+			try {
+				log.debug("Cliente 2 -> " + JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(newCliente));
+			} catch (JsonProcessingException e) {
+				log.debug("Sin cliente");
+			}
+			cliente = repository.save(cliente);
+			try {
+				log.debug("Cliente 3 -> " + JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(newCliente));
+			} catch (JsonProcessingException e) {
+				log.debug("Sin cliente");
+			}
 			return cliente;
 		}).orElseThrow(() -> new ClienteNotFoundException(uniqueId));
 	}

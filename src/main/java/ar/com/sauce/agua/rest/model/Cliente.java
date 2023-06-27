@@ -16,7 +16,6 @@ import jakarta.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import ar.com.sauce.agua.rest.model.pk.ClientePk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +29,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table
 @EqualsAndHashCode(callSuper=false)
-@IdClass(value = ClientePk.class)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente extends Auditable implements Serializable {
@@ -40,22 +38,21 @@ public class Cliente extends Auditable implements Serializable {
 	private static final long serialVersionUID = 362335725589674828L;
 
 	@Id
-	private Long clienteId;
-	
-	@Id
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechaAlta;
-
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "auto_id")
 	private Long uniqueId;
+
+	private Long clienteId;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
+	private OffsetDateTime fechaAlta;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
 	private OffsetDateTime fechaBaja;
 	
 	private String apellido = "";
 	private String nombre = "";
-	private String numeroSocio;
+	private String numeroSocio = null;
 	private String inmuebleCalle = "";
 	private String inmueblePuerta = "";
 	private String inmueblePiso = "";

@@ -114,7 +114,7 @@ public class ClienteController {
 
 	@GetMapping("/sociosactivos")
 	public ResponseEntity<List<SocioActivo>> findAllSociosActivos() {
-		return new ResponseEntity<List<SocioActivo>>(service.findAllSociosActivos(), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllSociosActivos(), HttpStatus.OK);
 	}
 
 	@GetMapping("/sociosactivosconcuotafija")
@@ -160,6 +160,6 @@ public class ClienteController {
 	
 	@PutMapping("/{uniqueId}")
 	public ResponseEntity<Cliente> update(@RequestBody Cliente cliente, @PathVariable Long uniqueId) {
-		return new ResponseEntity<Cliente>(service.update(cliente, uniqueId), HttpStatus.OK);
+		return new ResponseEntity<>(service.update(cliente, uniqueId), HttpStatus.OK);
 	}
 }

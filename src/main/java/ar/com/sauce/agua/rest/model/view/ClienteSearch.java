@@ -47,92 +47,35 @@ public class ClienteSearch extends Auditable implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "auto_id")
 	private Long uniqueId;
-	
-	@Column(name = "cliente_id")
+
 	private Long clienteId;
-	
-	@Column(name = "fecha_alta")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechaalta;
 
-	@Column(name = "fecha_baja")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechabaja;
-	
-	@Column(name = "apellido")
-	@NotNull
-	@Size(max = 50)
+	private OffsetDateTime fechaAlta;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
+	private OffsetDateTime fechaBaja;
+
 	private String apellido = "";
-
-	@Column(name = "nombre")
-	@NotNull
-	@Size(max = 50)
 	private String nombre = "";
-
-	@Column(name = "numero_socio")
-	@Size(max = 10)
-	private String numerosocio;
-
-	@Column(name = "inmueble_calle")
-	@NotNull
-	@Size(max = 50)
-	private String inmueblecalle = "";
-
-	@Column(name = "inmueble_puerta")
-	@NotNull
-	@Size(max = 10)
-	private String inmueblepuerta = "";
-
-	@Column(name = "inmueble_piso")
-	@NotNull
-	@Size(max = 10)
-	private String inmueblepiso = "";
-
-	@Column(name = "inmueble_dpto")
-	@NotNull
-	@Size(max = 10)
-	private String inmuebledpto = "";
-
-	@Column(name = "inmueble_localidad")
-	@NotNull
-	@Size(max = 50)
-	private String inmueblelocalidad = "";
-
-	@Column(name = "inmueble_provincia")
-	@NotNull
-	@Size(max = 50)
-	private String inmuebleprovincia = "";
-
-	@Column(name = "inmueble_codpostal")
-	private Integer inmueblecodpostal = 0;
-
-	@Column(name = "fiscal_calle")
-	private String fiscalcalle = "";
-
-	@Column(name = "fiscal_puerta")
-	private String fiscalpuerta = "";
-
-	@Column(name = "fiscal_piso")
-	private String fiscalpiso = "";
-
-	@Column(name = "fiscal_dpto")
-	private String fiscaldpto = "";
-
-	@Column(name = "fiscal_localidad")
-	private String fiscallocalidad = "";
-
-	@Column(name = "fiscal_provincia")
-	private String fiscalprovincia = "";
-
-	@Column(name = "fiscal_codpostal")
-	private Integer fiscalcodpostal = 0;
-
+	private String numeroSocio = null;
+	private String inmuebleCalle = "";
+	private String inmueblePuerta = "";
+	private String inmueblePiso = "";
+	private String inmuebleDpto = "";
+	private String inmuebleLocalidad = "";
+	private String inmuebleProvincia = "";
+	private Integer inmuebleCodpostal = 0;
+	private String fiscalCalle = "";
+	private String fiscalPuerta = "";
+	private String fiscalPiso = "";
+	private String fiscalDpto = "";
+	private String fiscalLocalidad = "";
+	private String fiscalProvincia = "";
+	private Integer fiscalCodpostal = 0;
 	private String cuit = "";
-
-	@Column(name = "situacion_iva")
-	private Integer situacioniva = 0;
-	@Column(name = "nombre_categoria")
-	private String nombrecategoria = "";
+	private Integer situacionIva = 0;
+	private String nombreCategoria = "";
 	private Integer categoria = 0;
 	private Integer servicio = 0;
 	private Integer cobro = 0;
@@ -142,10 +85,9 @@ public class ClienteSearch extends Auditable implements Serializable {
 	private Byte cortado = 0;
 	private Integer estadoId = 0;
 
-	@Column(name = "fecha_nacimiento")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechanacimiento;
-	
+	private OffsetDateTime fechaNacimiento;
+
 	private Integer categoriasocioId = 0;
 	private Integer destinoId = 0;
 	private String uid = "";

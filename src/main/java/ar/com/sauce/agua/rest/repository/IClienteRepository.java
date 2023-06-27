@@ -11,14 +11,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import ar.com.sauce.agua.rest.model.Cliente;
-import ar.com.sauce.agua.rest.model.pk.ClientePk;
 
 /**
  * @author daniel
  *
  */
 @Repository
-public interface IClienteRepository extends JpaRepository<Cliente, ClientePk> {
+public interface IClienteRepository extends JpaRepository<Cliente, Long> {
 
 	public List<Cliente> findAllByClienteId(Long clienteId, Sort sort);
 

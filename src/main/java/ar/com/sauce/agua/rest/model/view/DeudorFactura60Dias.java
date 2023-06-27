@@ -43,163 +43,51 @@ public class DeudorFactura60Dias extends Auditable implements Serializable, ICli
 	private static final long serialVersionUID = 8405439115783231239L;
 
 	@Id
-	@Column(name = "cliente_id")
 	private Long clienteId;
-
-	@Column(name = "fecha_alta")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechaalta;
 
 	@Column(name = "auto_id")
 	private Long uniqueId;
 
-	@Column(name = "fecha_baja")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechabaja;
+	private OffsetDateTime fechaAlta;
 
-	@Column(name = "apellido")
-	@NotNull
-	@Size(max = 50)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
+	private OffsetDateTime fechaBaja;
+
 	private String apellido = "";
-
-	@Column(name = "nombre")
-	@NotNull
-	@Size(max = 50)
 	private String nombre = "";
-
-	@Column(name = "numero_socio")
-	@Size(max = 10)
-	private String numerosocio;
-
-	@Column(name = "inmueble_calle")
-	@NotNull
-	@Size(max = 50)
-	private String inmueblecalle = "";
-
-	@Column(name = "inmueble_puerta")
-	@NotNull
-	@Size(max = 10)
-	private String inmueblepuerta = "";
-
-	@Column(name = "inmueble_piso")
-	@NotNull
-	@Size(max = 10)
-	private String inmueblepiso = "";
-
-	@Column(name = "inmueble_dpto")
-	@NotNull
-	@Size(max = 10)
-	private String inmuebledpto = "";
-
-	@Column(name = "inmueble_localidad")
-	@NotNull
-	@Size(max = 50)
-	private String inmueblelocalidad = "";
-
-	@Column(name = "inmueble_provincia")
-	@NotNull
-	@Size(max = 50)
-	private String inmuebleprovincia = "";
-
-	@Column(name = "inmueble_codpostal")
-	@NotNull
-	private Integer inmueblecodpostal = 0;
-
-	@Column(name = "fiscal_calle")
-	@NotNull
-	@Size(max = 50)
-	private String fiscalcalle = "";
-
-	@Column(name = "fiscal_puerta")
-	@NotNull
-	@Size(max = 10)
-	private String fiscalpuerta = "";
-
-	@Column(name = "fiscal_piso")
-	@NotNull
-	@Size(max = 10)
-	private String fiscalpiso = "";
-
-	@Column(name = "fiscal_dpto")
-	@NotNull
-	@Size(max = 10)
-	private String fiscaldpto = "";
-
-	@Column(name = "fiscal_localidad")
-	@NotNull
-	@Size(max = 50)
-	private String fiscallocalidad = "";
-
-	@Column(name = "fiscal_provincia")
-	@NotNull
-	@Size(max = 50)
-	private String fiscalprovincia = "";
-
-	@Column(name = "fiscal_codpostal")
-	@NotNull
-	private Integer fiscalcodpostal = 0;
-
-	@Column(name = "cuit")
-	@NotNull
-	@Size(max = 11)
+	private String numeroSocio = null;
+	private String inmuebleCalle = "";
+	private String inmueblePuerta = "";
+	private String inmueblePiso = "";
+	private String inmuebleDpto = "";
+	private String inmuebleLocalidad = "";
+	private String inmuebleProvincia = "";
+	private Integer inmuebleCodpostal = 0;
+	private String fiscalCalle = "";
+	private String fiscalPuerta = "";
+	private String fiscalPiso = "";
+	private String fiscalDpto = "";
+	private String fiscalLocalidad = "";
+	private String fiscalProvincia = "";
+	private Integer fiscalCodpostal = 0;
 	private String cuit = "";
-
-	@Column(name = "situacion_iva")
-	@NotNull
-	private Integer situacioniva = 0;
-
-	@Column(name = "nombre_categoria")
-	@NotNull
-	@Size(max = 50)
-	private String nombrecategoria = "";
-
-	@Column(name = "categoria")
-	@NotNull
+	private Integer situacionIva = 0;
+	private String nombreCategoria = "";
 	private Integer categoria = 0;
-
-	@Column(name = "servicio")
-	@NotNull
 	private Integer servicio = 0;
-
-	@Column(name = "cobro")
-	@NotNull
 	private Integer cobro = 0;
-
-	@Column(name = "zona")
-	@NotNull
 	private Integer zona = 0;
-
-	@Column(name = "ruta")
-	@NotNull
 	private Integer ruta = 0;
-
-	@Column(name = "orden")
-	@NotNull
 	private Integer orden = 0;
-	
-	@Column(name = "cortado")
-	@NotNull
 	private Byte cortado = 0;
-
-	@Column(name = "estado_id")
-	@NotNull
 	private Integer estadoId = 0;
 
-	@Column(name = "fecha_nacimiento")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
-	private OffsetDateTime fechanacimiento;
+	private OffsetDateTime fechaNacimiento;
 
-	@Column(name = "categoriasocio_id")
-	@NotNull
 	private Integer categoriasocioId = 0;
-
-	@Column(name = "destino_id")
-	@NotNull
 	private Integer destinoId = 0;
-
-	@Column(name = "uid")
-	@NotNull
-	@Size(max = 20)
 	private String uid = "";
 
 }
