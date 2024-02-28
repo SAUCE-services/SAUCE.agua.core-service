@@ -48,7 +48,6 @@ public class Factura extends Auditable implements Serializable {
 	@Id
 	private Long facturaId;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "auto_id")
 	private Long uniqueId;
 

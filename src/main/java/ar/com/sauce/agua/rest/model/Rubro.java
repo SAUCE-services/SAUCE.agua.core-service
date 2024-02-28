@@ -51,7 +51,6 @@ public class Rubro extends Auditable implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
 	private OffsetDateTime fecha = OffsetDateTime.now();
 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "auto_id")
 	private Long uniqueId;
 

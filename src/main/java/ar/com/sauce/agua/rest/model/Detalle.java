@@ -51,7 +51,6 @@ public class Detalle extends Auditable implements Serializable {
 	private BigDecimal precioUnitario = BigDecimal.ZERO;
 	private Byte iva = 0;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "auto_id")
 	private Long detalleId;
 

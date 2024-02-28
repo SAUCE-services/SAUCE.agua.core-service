@@ -52,7 +52,6 @@ public class Novedad extends Auditable implements Serializable {
 	@Id
 	private Integer rubroId;
 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "auto_id")
 	private Long novedadId;
 	

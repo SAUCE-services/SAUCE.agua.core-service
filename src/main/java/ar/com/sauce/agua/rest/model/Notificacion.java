@@ -49,9 +49,7 @@ public class Notificacion extends Auditable implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
 	private OffsetDateTime fecha;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long notificacionId;
-	
 	private Integer tiponotificacionId;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
