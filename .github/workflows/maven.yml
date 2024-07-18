@@ -32,9 +32,9 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v6
       name: Build & push Docker image
       env:
-        VERSION: 5.4.8
+        VERSION: 5.4.9
       with:
-        image: dqmdz/sauce.agua
+        image: dqmdz/sauce.agua.core-service
         tags: ${VERSION}, latest, "${GITHUB_REF#refs/heads/}.$(git rev-parse --short ${GITHUB_SHA})"
         registry: docker.io
         dockerfile: Dockerfile
