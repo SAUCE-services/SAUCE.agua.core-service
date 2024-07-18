@@ -1,0 +1,62 @@
+app:
+  server: 127.0.0.1:3306
+  database: agua
+  user: root
+  password: root
+  logging: debug
+  open-in-view: true
+  port: 8082
+  mail:
+    username: uid
+    password: pwd
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka:@eureka-service:8761/eureka
+
+server:
+  port: ${app.port}
+  
+spring:
+  application:
+    name: core-service
+  datasource:
+    url: jdbc:mysql://${app.server}/${app.database}?useSSL=false&serverTimezone=UTC
+    username: ${app.user}
+    password: ${app.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: ${app.open-in-view}
+    hibernate:
+      ddl-auto: none
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${app.mail.username}
+    password: ${app.mail.password}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+logging:
+  level:
+    sauce.agua.rest: ${app.logging}
+    web: ${app.logging}
+    org:
+      hibernate:
+        SQL: ${app.logging}
+
+
