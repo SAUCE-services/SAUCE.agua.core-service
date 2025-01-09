@@ -1,14 +1,18 @@
 app:
+  port: ${APP_PORT:8082}
+  eureka: 8761
+  logging: debug
+  name: core-service
   server: 127.0.0.1:3306
   database: agua
   user: root
   password: root
-  logging: debug
-  open-in-view: true
-  port: 8082
   mail:
     username: uid
     password: pwd
+
+server:
+  port: ${app.port}
 
 eureka:
   instance:
@@ -17,14 +21,11 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://eureka:@eureka-service:8761/eureka
-
-server:
-  port: ${app.port}
+      defaultZone: http://eureka:@eureka-service:${app.eureka}/eureka
   
 spring:
   application:
-    name: core-service
+    name: ${app.name}
   datasource:
     url: jdbc:mysql://${app.server}/${app.database}?useSSL=false&serverTimezone=UTC
     username: ${app.user}
@@ -32,7 +33,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-    open-in-view: ${app.open-in-view}
     hibernate:
       ddl-auto: none
   mail:

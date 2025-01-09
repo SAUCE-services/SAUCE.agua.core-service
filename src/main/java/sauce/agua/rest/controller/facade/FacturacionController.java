@@ -22,27 +22,31 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @RestController
-@RequestMapping("/facturacion")
+@RequestMapping({"/facturacion", "/api/core/facturacion"})
 @Slf4j
 public class FacturacionController {
-	@Autowired
-	private FacturacionService service;
+
+	private final FacturacionService service;
+
+	public FacturacionController(FacturacionService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/ajuste/{prefijoId}/{facturaId}/{decimals}")
 	public ResponseEntity<Void> adjust(@PathVariable Integer prefijoId, @PathVariable Long facturaId,
 			@PathVariable Integer decimals) {
 		service.adjust(prefijoId, facturaId, decimals);
-		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PostMapping("/codigopf")
 	public ResponseEntity<String> codigopf(@RequestBody Factura factura) {
 		log.debug("Factura -> {}", factura);
-		return new ResponseEntity<String>(service.recalculateCodigoPagoFacil(factura), HttpStatus.OK);
+		return new ResponseEntity<>(service.recalculateCodigoPagoFacil(factura), HttpStatus.OK);
 	}
 	
 	@GetMapping("/i2of5/{codigo}")
 	public ResponseEntity<String> i2of5(@PathVariable String codigo) {
-		return new ResponseEntity<String>(service.i2of5(codigo), HttpStatus.OK);
+		return new ResponseEntity<>(service.i2of5(codigo), HttpStatus.OK);
 	}
 }

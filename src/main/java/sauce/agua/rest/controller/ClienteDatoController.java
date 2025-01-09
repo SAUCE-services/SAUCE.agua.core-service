@@ -24,11 +24,14 @@ import sauce.agua.rest.service.ClienteDatoService;
  *
  */
 @RestController
-@RequestMapping("/clientedato")
+@RequestMapping({"/clientedato", "/api/core/clientedato"})
 public class ClienteDatoController {
 
-	@Autowired
-	private ClienteDatoService service;
+	private final ClienteDatoService service;
+
+	public ClienteDatoController(ClienteDatoService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/{clienteId}")
 	public ResponseEntity<ClienteDato> findByClienteId(@PathVariable Long clienteId) {
