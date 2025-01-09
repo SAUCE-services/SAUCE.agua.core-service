@@ -27,11 +27,14 @@ import sauce.agua.rest.service.facade.LiquidacionService;
  *
  */
 @RestController
-@RequestMapping("/liquidacion")
+@RequestMapping({"/liquidacion", "/api/core/liquidacion"})
 public class LiquidacionController {
 
-	@Autowired
-	private LiquidacionService service;
+	private final LiquidacionService service;
+
+	public LiquidacionController(LiquidacionService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/generatePdf/{prefijoId}/{facturaId}")
 	public ResponseEntity<Resource> generatePdf(@PathVariable Integer prefijoId, @PathVariable Long facturaId)

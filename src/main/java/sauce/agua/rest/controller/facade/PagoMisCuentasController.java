@@ -28,10 +28,14 @@ import sauce.agua.rest.service.facade.PagoMisCuentasService;
  *
  */
 @RestController
-@RequestMapping("/pmc")
+@RequestMapping({"/pagomiscuentas", "/api/core/pagomiscuentas"})
 public class PagoMisCuentasController {
-	@Autowired
-	private PagoMisCuentasService service;
+
+	private final PagoMisCuentasService service;
+
+	public PagoMisCuentasController(PagoMisCuentasService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/generate/{filename_return}/{desde}/{hasta}")
 	public ResponseEntity<Resource> generate(@PathVariable String filename_return,
@@ -47,6 +51,6 @@ public class PagoMisCuentasController {
 		headers.add("Expires", "0");
 		return ResponseEntity.ok().headers(headers).contentLength(file.length())
 				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
-
 	}
+
 }

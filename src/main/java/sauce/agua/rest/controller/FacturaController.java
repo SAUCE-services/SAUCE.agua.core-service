@@ -21,24 +21,28 @@ import sauce.agua.rest.service.FacturaService;
  *
  */
 @RestController
-@RequestMapping("/factura")
+@RequestMapping({"/factura", "/api/core/factura"})
 public class FacturaController {
-	@Autowired
-	private FacturaService service;
+
+	private final FacturaService service;
+
+	public FacturaController(FacturaService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/periodo/{periodoId}")
 	public ResponseEntity<List<Factura>> findAllByPeriodoId(@PathVariable Integer periodoId) {
-		return new ResponseEntity<List<Factura>>(service.findAllByPeriodoId(periodoId), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllByPeriodoId(periodoId), HttpStatus.OK);
 	}
 
 	@GetMapping("/zona/{periodoId}/{zona}")
 	public ResponseEntity<List<Factura>> findAllByPeriodoIdAndZona(@PathVariable Integer periodoId,
 			@PathVariable Integer zona) {
-		return new ResponseEntity<List<Factura>>(service.findAllByPeriodoIdAndZona(periodoId, zona), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllByPeriodoIdAndZona(periodoId, zona), HttpStatus.OK);
 	}
 
 	@GetMapping("/{prefijoId}/{facturaId}")
 	public ResponseEntity<Factura> findByFactura(@PathVariable Integer prefijoId, @PathVariable Long facturaId) {
-		return new ResponseEntity<Factura>(service.findByFactura(prefijoId, facturaId), HttpStatus.OK);
+		return new ResponseEntity<>(service.findByFactura(prefijoId, facturaId), HttpStatus.OK);
 	}
 }

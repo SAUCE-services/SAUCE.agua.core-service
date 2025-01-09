@@ -27,32 +27,35 @@ import sauce.agua.rest.service.NotificacionService;
  *
  */
 @RestController
-@RequestMapping("/notificacion")
+@RequestMapping({"/notificacion", "/api/core/notificacion"})
 public class NotificacionController {
 
-	@Autowired
-	private NotificacionService service;
+	private final NotificacionService service;
+
+	public NotificacionController(NotificacionService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/byfecha/{fecha}")
 	public ResponseEntity<List<Notificacion>> findAllByFecha(
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
-		return new ResponseEntity<List<Notificacion>>(service.findAllByFecha(fecha), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllByFecha(fecha), HttpStatus.OK);
 	}
 
 	@GetMapping("/unique/{clienteId}/{fecha}")
 	public ResponseEntity<Notificacion> findByUnique(@PathVariable Long clienteId,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
-		return new ResponseEntity<Notificacion>(service.findByUnique(clienteId, fecha), HttpStatus.OK);
+		return new ResponseEntity<>(service.findByUnique(clienteId, fecha), HttpStatus.OK);
 	}
 
 	@PostMapping("/")
 	public ResponseEntity<Notificacion> add(@RequestBody Notificacion notificacion) {
-		return new ResponseEntity<Notificacion>(service.add(notificacion), HttpStatus.OK);
+		return new ResponseEntity<>(service.add(notificacion), HttpStatus.OK);
 	}
 
 	@PutMapping("/{clienteId}/{fecha}")
 	public ResponseEntity<Notificacion> update(@RequestBody Notificacion notificacion, @PathVariable Long clienteId,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
-		return new ResponseEntity<Notificacion>(service.update(notificacion, clienteId, fecha), HttpStatus.OK);
+		return new ResponseEntity<>(service.update(notificacion, clienteId, fecha), HttpStatus.OK);
 	}
 }

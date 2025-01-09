@@ -21,19 +21,22 @@ import sauce.agua.rest.service.TipoNotificacionService;
  *
  */
 @RestController
-@RequestMapping("/tiponotificacion")
+@RequestMapping({"/tiponotificacion", "/api/core/tiponotificacion"})
 public class TipoNotificacionController {
 
-	@Autowired
-	private TipoNotificacionService service;
+	private final TipoNotificacionService service;
+
+	public TipoNotificacionController(TipoNotificacionService service) {
+		this.service = service;
+	}
 	
 	@GetMapping("/")
 	public ResponseEntity<List<TipoNotificacion>> findAll() {
-		return new ResponseEntity<List<TipoNotificacion>>(service.findAll(), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{tiponotificacionId}")
 	public ResponseEntity<TipoNotificacion> findByTiponotificacionId(@PathVariable Integer tiponotificacionId) {
-		return new ResponseEntity<TipoNotificacion>(service.findByTiponotificacionId(tiponotificacionId), HttpStatus.OK);
+		return new ResponseEntity<>(service.findByTiponotificacionId(tiponotificacionId), HttpStatus.OK);
 	}
 }

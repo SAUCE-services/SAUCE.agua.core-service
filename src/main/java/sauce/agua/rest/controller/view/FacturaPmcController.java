@@ -24,15 +24,19 @@ import sauce.agua.rest.service.view.FacturaPmcService;
  *
  */
 @RestController
-@RequestMapping("/facturapmc")
+@RequestMapping({"/facturapmc", "/api/core/facturapmc"})
 public class FacturaPmcController {
-	@Autowired
-	private FacturaPmcService service;
+
+	private final FacturaPmcService service;
+
+	public FacturaPmcController(FacturaPmcService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/deuda/{desde}/{hasta}")
 	public ResponseEntity<List<FacturaPmc>> findAllByPeriodo(
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime desde,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime hasta) {
-		return new ResponseEntity<List<FacturaPmc>>(service.findAllByPeriodo(desde, hasta), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllByPeriodo(desde, hasta), HttpStatus.OK);
 	}
 }

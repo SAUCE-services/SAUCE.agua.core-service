@@ -26,11 +26,14 @@ import sauce.agua.rest.service.facade.DgeFileService;
  *
  */
 @RestController
-@RequestMapping("/dgefile")
+@RequestMapping({"/dgefile", "/api/core/dgefile"})
 public class DgeFileController {
 
-	@Autowired
-	private DgeFileService service;
+	private final DgeFileService service;
+
+	public DgeFileController(DgeFileService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/generate/{periodoId}")
 	public ResponseEntity<Resource> generate(@PathVariable Integer periodoId)

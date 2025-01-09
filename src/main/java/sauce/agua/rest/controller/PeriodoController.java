@@ -31,32 +31,36 @@ import org.springframework.web.server.ResponseStatusException;
  *
  */
 @RestController
-@RequestMapping("/periodo")
+@RequestMapping({"/periodo", "/api/core/periodo"})
 @Slf4j
 public class PeriodoController {
-	@Autowired
-	private PeriodoService service;
+
+	private final PeriodoService service;
+
+	public PeriodoController(PeriodoService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/")
 	public ResponseEntity<List<Periodo>> findAll() {
-		return new ResponseEntity<List<Periodo>>(service.findAll(), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/recaudado/{desde}/{hasta}")
 	public ResponseEntity<List<Periodo>> findAllRecaudadoByPeriodo(
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime desde,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime hasta) {
-		return new ResponseEntity<List<Periodo>>(service.findAllRecaudadoByPeriodo(desde, hasta), HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllRecaudadoByPeriodo(desde, hasta), HttpStatus.OK);
 	}
 
 	@GetMapping("/{periodoId}")
 	public ResponseEntity<Periodo> findByPeriodoId(@PathVariable Integer periodoId) {
-		return new ResponseEntity<Periodo>(service.findByPeriodoId(periodoId), HttpStatus.OK);
+		return new ResponseEntity<>(service.findByPeriodoId(periodoId), HttpStatus.OK);
 	}
 
 	@GetMapping("/last")
 	public ResponseEntity<Periodo> findLast() {
-		return new ResponseEntity<Periodo>(service.findLast(), HttpStatus.OK);
+		return new ResponseEntity<>(service.findLast(), HttpStatus.OK);
 	}
 
 	@GetMapping("/today")
@@ -76,17 +80,18 @@ public class PeriodoController {
 
 	@PostMapping("/")
 	public ResponseEntity<Periodo> add(@RequestBody Periodo periodo) {
-		return new ResponseEntity<Periodo>(service.add(periodo), HttpStatus.OK);
+		return new ResponseEntity<>(service.add(periodo), HttpStatus.OK);
 	}
 
 	@PutMapping("/{periodoId}")
 	public ResponseEntity<Periodo> update(@RequestBody Periodo periodo, @PathVariable Integer periodoId) {
-		return new ResponseEntity<Periodo>(service.update(periodo, periodoId), HttpStatus.OK);
+		return new ResponseEntity<>(service.update(periodo, periodoId), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{periodoId}")
 	public ResponseEntity<Void> delete(@PathVariable Integer periodoId) {
 		service.delete(periodoId);
-		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
 }
