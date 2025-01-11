@@ -3,7 +3,6 @@
  */
 package sauce.agua.rest.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import sauce.agua.rest.exception.ClienteDatoNotFoundException;
+import sauce.agua.rest.exception.ClienteDatoException;
 import sauce.agua.rest.model.ClienteDato;
 import sauce.agua.rest.service.ClienteDatoService;
 
@@ -37,7 +36,7 @@ public class ClienteDatoController {
 	public ResponseEntity<ClienteDato> findByClienteId(@PathVariable Long clienteId) {
 		try {
 			return new ResponseEntity<ClienteDato>(service.findByClienteId(clienteId), HttpStatus.OK);
-		} catch (ClienteDatoNotFoundException e) {
+		} catch (ClienteDatoException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
