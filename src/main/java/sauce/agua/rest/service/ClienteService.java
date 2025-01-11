@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.ClienteNotFoundException;
+import sauce.agua.rest.exception.ClienteException;
 import sauce.agua.rest.model.Cliente;
 import sauce.agua.rest.model.ICliente;
 import sauce.agua.rest.model.view.ActivoConMedidor;
@@ -170,17 +170,17 @@ public class ClienteService {
 	}
 
 	public Cliente findByUniqueId(Long uniqueId) {
-		return repository.findByUniqueId(uniqueId).orElseThrow(() -> new ClienteNotFoundException(uniqueId));
+		return repository.findByUniqueId(uniqueId).orElseThrow(() -> new ClienteException(uniqueId));
 	}
 
 	public Cliente findLastByClienteId(Long clienteId) {
 		return repository.findTopByClienteIdOrderByFechaAltaDesc(clienteId)
-				.orElseThrow(() -> new ClienteNotFoundException(clienteId));
+				.orElseThrow(() -> new ClienteException(clienteId));
 	}
 
 	public Cliente findLastCliente() {
 		return repository.findTopByOrderByClienteIdDescFechaAltaDesc()
-				.orElseThrow(() -> new ClienteNotFoundException());
+				.orElseThrow(() -> new ClienteException());
 	}
 
 	public Cliente add(Cliente cliente) {
@@ -220,7 +220,7 @@ public class ClienteService {
 				log.debug("Sin cliente");
 			}
 			return cliente;
-		}).orElseThrow(() -> new ClienteNotFoundException(uniqueId));
+		}).orElseThrow(() -> new ClienteException(uniqueId));
 	}
 
 	public ClienteRecorrido findNextCliente(Long clienteId) {

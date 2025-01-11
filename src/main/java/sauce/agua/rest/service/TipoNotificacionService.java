@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.TipoNotificacionNotFound;
+import sauce.agua.rest.exception.TipoNotificacionException;
 import sauce.agua.rest.model.TipoNotificacion;
 import sauce.agua.rest.repository.ITipoNotificacionRepository;
 
@@ -28,6 +28,6 @@ public class TipoNotificacionService {
 
 	public TipoNotificacion findByTiponotificacionId(Integer tiponotificacionId) {
 		return repository.findByTiponotificacionId(tiponotificacionId)
-				.orElseThrow(() -> new TipoNotificacionNotFound(tiponotificacionId));
+				.orElseThrow(() -> new TipoNotificacionException(tiponotificacionId));
 	}
 }

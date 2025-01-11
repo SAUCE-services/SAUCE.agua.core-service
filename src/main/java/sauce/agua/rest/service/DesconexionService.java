@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.DesconexionNotFoundException;
+import sauce.agua.rest.exception.DesconexionException;
 import sauce.agua.rest.model.Desconexion;
 import sauce.agua.rest.repository.IDesconexionRepository;
 
@@ -25,7 +25,7 @@ public class DesconexionService {
 	public Desconexion findByClienteId(Long clienteId, OffsetDateTime fechaEmision) {
 		return repository
 				.findTopByClienteIdAndFechaDesconexionLessThanEqualOrderByFechaDesconexionDesc(clienteId, fechaEmision)
-				.orElseThrow(() -> new DesconexionNotFoundException(clienteId, fechaEmision));
+				.orElseThrow(() -> new DesconexionException(clienteId, fechaEmision));
 	}
 
 }

@@ -6,8 +6,7 @@ package sauce.agua.rest.controller;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import sauce.agua.rest.exception.PeriodoNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import sauce.agua.rest.exception.PeriodoException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
@@ -65,7 +64,7 @@ public class PeriodoController {
 
 	@GetMapping("/today")
 	public ResponseEntity<Periodo> findToday() {
-		return new ResponseEntity<Periodo>(service.findToday(), HttpStatus.OK);
+		return new ResponseEntity<>(service.findToday(), HttpStatus.OK);
 	}
 
 	@GetMapping("/byfecha/{fecha}")
@@ -73,7 +72,7 @@ public class PeriodoController {
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
 		try {
 			return new ResponseEntity<>(service.findByFecha(fecha), HttpStatus.OK);
-		} catch (PeriodoNotFoundException e) {
+		} catch (PeriodoException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}

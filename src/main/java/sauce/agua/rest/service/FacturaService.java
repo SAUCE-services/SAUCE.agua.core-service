@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.FacturaNotFoundException;
+import sauce.agua.rest.exception.FacturaException;
 import sauce.agua.rest.model.Cliente;
 import sauce.agua.rest.model.Factura;
 import sauce.agua.rest.repository.IClienteRepository;
@@ -61,7 +61,7 @@ public class FacturaService {
 
 	public Factura findByFactura(Integer prefijoId, Long facturaId) {
 		return repository.findByPrefijoIdAndFacturaId(prefijoId, facturaId)
-				.orElseThrow(() -> new FacturaNotFoundException(prefijoId, facturaId));
+				.orElseThrow(() -> new FacturaException(prefijoId, facturaId));
 	}
 
 }

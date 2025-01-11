@@ -18,7 +18,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -61,32 +60,29 @@ import org.springframework.core.env.Environment;
 @Slf4j
 public class LiquidacionService {
 
-	@Autowired
-	private Environment env;
+	private final Environment env;
+	private final JavaMailSender sender;
+	private final FacturaService facturaService;
+	private final DetalleService detalleService;
+	private final ClienteService clienteService;
+	private final PeriodoService periodoService;
+	private final MedidorService medidorService;
+	private final ConsumoService consumoService;
+	private final ClienteDatoService clienteDatoService;
 
-	@Autowired
-	private JavaMailSender sender;
-
-	@Autowired
-	private FacturaService facturaService;
-
-	@Autowired
-	private DetalleService detalleService;
-
-	@Autowired
-	private ClienteService clienteService;
-
-	@Autowired
-	private PeriodoService periodoService;
-
-	@Autowired
-	private MedidorService medidorService;
-
-	@Autowired
-	private ConsumoService consumoService;
-
-	@Autowired
-	private ClienteDatoService clienteDatoService;
+	public LiquidacionService(Environment env, JavaMailSender sender, FacturaService facturaService,
+			DetalleService detalleService, ClienteService clienteService, PeriodoService periodoService,
+			MedidorService medidorService, ConsumoService consumoService, ClienteDatoService clienteDatoService) {
+		this.env = env;
+		this.sender = sender;
+		this.facturaService = facturaService;
+		this.detalleService = detalleService;
+		this.clienteService = clienteService;
+		this.periodoService = periodoService;
+		this.medidorService = medidorService;
+		this.consumoService = consumoService;
+		this.clienteDatoService = clienteDatoService;
+	}
 
 	public String generatePdf(Integer prefijoId, Long facturaId) {
 		String path = env.getProperty("path.files");
@@ -185,7 +181,7 @@ public class LiquidacionService {
 			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
 
 			// Periodo
-			float column[] = { 1, 1, 1, 1, 1 };
+			float[] column = { 1, 1, 1, 1, 1 };
 			PdfPTable table = new PdfPTable(column);
 			table.setWidthPercentage(100);
 
@@ -246,7 +242,7 @@ public class LiquidacionService {
 			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
 
 			// Consumo
-			float columnConsumo[] = { 1, 1, 1, 1, 1, 1 };
+			float[] columnConsumo = { 1, 1, 1, 1, 1, 1 };
 			PdfPTable tableConsumo = new PdfPTable(columnConsumo);
 			tableConsumo.setWidthPercentage(100);
 			paragraph = new Paragraph("Medidor", new Font(Font.HELVETICA, 9));
@@ -309,7 +305,7 @@ public class LiquidacionService {
 			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
 
 			// Rubros
-			float columnRubros[] = { 1, 12, 2, 2, 2 };
+			float[] columnRubros = { 1, 12, 2, 2, 2 };
 			PdfPTable tableRubros = new PdfPTable(columnRubros);
 			tableRubros.setWidthPercentage(100);
 			cell = new PdfPCell(new Paragraph("#", new Font(Font.HELVETICA, 9, Font.BOLD)));
@@ -339,7 +335,7 @@ public class LiquidacionService {
 			tableRubros.addCell(cell);
 
 			BigDecimal total = BigDecimal.ZERO;
-			Integer countRows = 25;
+			int countRows = 20;
 
 			// Lista rubros
 			for (Detalle detalle : detalleService.findAllByFactura(prefijoId, facturaId)) {
@@ -349,7 +345,7 @@ public class LiquidacionService {
 				cell.setVerticalAlignment(Element.ALIGN_CENTER);
 				cell.setLeading(0, 1.5f);
 				tableRubros.addCell(cell);
-				cell = new PdfPCell(new Paragraph(detalle.getConcepto(), new Font(Font.HELVETICA, 9)));
+				cell = new PdfPCell(new Paragraph(detalle.getConcepto(), new Font(Font.HELVETICA, 8)));
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setVerticalAlignment(Element.ALIGN_CENTER);
 				cell.setLeading(0, 1.5f);
@@ -377,8 +373,8 @@ public class LiquidacionService {
 				tableRubros.addCell(cell);
 			}
 			// Lista espacios en blanco para llenar la hoja
-			for (Integer counter = countRows; counter >= 0; counter -= 1) {
-				for (Integer counterCell = 0; counterCell < 3; counterCell++) {
+			for (int counter = countRows; counter >= 0; counter -= 1) {
+				for (int counterCell = 0; counterCell < 3; counterCell++) {
 					cell = new PdfPCell(new Paragraph(" ", new Font(Font.HELVETICA, 9)));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -392,7 +388,7 @@ public class LiquidacionService {
 			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
 
 			// Totales y Deuda
-			float columnTotales[] = { 5, 2 };
+			float[] columnTotales = { 5, 2 };
 			PdfPTable tableTotales = new PdfPTable(columnTotales);
 			tableTotales.setWidthPercentage(100);
 
@@ -412,7 +408,7 @@ public class LiquidacionService {
 			tableTotales.addCell(cell);
 
 			// Deuda
-			float columnDeuda[] = { 2, 3, 2, 2, 2, 2 };
+			float[] columnDeuda = { 2, 3, 2, 2, 2, 2 };
 			PdfPTable tableDeuda = new PdfPTable(columnDeuda);
 			tableDeuda.setWidthPercentage(100);
 
@@ -543,14 +539,14 @@ public class LiquidacionService {
 
 	public String sendLiquidacion(Integer prefijoId, Long facturaId) throws MessagingException {
 		String filenameLiquidacion = this.generatePdf(prefijoId, facturaId);
-		log.info("Filename_liquidacion -> " + filenameLiquidacion);
-		if (filenameLiquidacion.equals("")) {
+        log.info("Filename_liquidacion -> {}", filenameLiquidacion);
+		if (filenameLiquidacion.isEmpty()) {
 			return "ERROR: Sin Liquidación para ENVIAR";
 		}
 
 		String data = "";
 
-		data = "Estimad@ " + "" + ": " + (char) 10;
+		data = "Estimad@ " + ": " + (char) 10;
 		data = data + (char) 10;
 		data = data + "Le enviamos como archivo adjunto su liquidación del servicio de agua." + (char) 10;
 		data = data + (char) 10;
@@ -571,7 +567,7 @@ public class LiquidacionService {
 		addresses.add(clienteDato.getEmail());
 
 		try {
-			helper.setTo(addresses.toArray(new String[addresses.size()]));
+			helper.setTo(addresses.toArray(new String[0]));
 			helper.setText(data);
 			helper.setSubject("Envío Automático de Liquidación de Consumo de Agua -> " + filenameLiquidacion);
 

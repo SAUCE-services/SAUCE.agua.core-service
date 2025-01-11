@@ -10,11 +10,11 @@ import java.time.OffsetDateTime;
  * @author daniel
  *
  */
-public class DesconexionNotFoundException extends RuntimeException {
+public class DesconexionException extends RuntimeException {
 
 	private static final long serialVersionUID = -2282384956265605136L;
 
-	public DesconexionNotFoundException(Long clienteId, OffsetDateTime fechaEmision) {
+	public DesconexionException(Long clienteId, OffsetDateTime fechaEmision) {
 		super(MessageFormat.format("Cannot find Desconexion {0}/{1}", clienteId, fechaEmision));
 	}
 

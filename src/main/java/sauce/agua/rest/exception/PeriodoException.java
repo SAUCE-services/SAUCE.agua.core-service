@@ -7,17 +7,17 @@ package sauce.agua.rest.exception;
  * @author daniel
  *
  */
-public class PeriodoNotFoundException extends RuntimeException {
+public class PeriodoException extends RuntimeException {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7110246459698948760L;
 
-	public PeriodoNotFoundException() {
+	public PeriodoException() {
 		super("Cannot find Periodo");
 	}
 	
-	public PeriodoNotFoundException(Integer periodoId) {
+	public PeriodoException(Integer periodoId) {
 		super("Cannot find Periodo " + periodoId);
 	}
 

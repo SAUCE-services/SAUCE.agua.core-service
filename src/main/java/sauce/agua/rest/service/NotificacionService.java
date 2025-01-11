@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.NotificacionNotFoundException;
+import sauce.agua.rest.exception.NotificacionException;
 import sauce.agua.rest.model.Notificacion;
 import sauce.agua.rest.repository.INotificacionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class NotificacionService {
 
 	public Notificacion findByUnique(Long clienteId, OffsetDateTime fecha) {
 		return repository.findByClienteIdAndFecha(clienteId, fecha)
-				.orElseThrow(() -> new NotificacionNotFoundException(clienteId, fecha));
+				.orElseThrow(() -> new NotificacionException(clienteId, fecha));
 	}
 
 	public Notificacion add(Notificacion notificacion) {
@@ -48,7 +48,7 @@ public class NotificacionService {
 			repository.save(notificacion);
 			log.debug("Notificacion -> " + notificacion);
 			return notificacion;
-		}).orElseThrow(() -> new NotificacionNotFoundException(clienteId, fecha));
+		}).orElseThrow(() -> new NotificacionException(clienteId, fecha));
 	}
 
 }

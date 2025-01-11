@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.MedidorNotFoundException;
+import sauce.agua.rest.exception.MedidorException;
 import sauce.agua.rest.model.Medidor;
 import sauce.agua.rest.repository.IMedidorRepository;
 
@@ -52,6 +52,6 @@ public class MedidorService {
 		return repository
 				.findTopByClienteIdAndFechaRetiroIsNull(clienteId,
 						Sort.by("fechaAlta").descending().and(Sort.by("fechaColocacion").descending()))
-				.orElseThrow(() -> new MedidorNotFoundException(clienteId, "Colocado"));
+				.orElseThrow(() -> new MedidorException(clienteId, "Colocado"));
 	}
 }

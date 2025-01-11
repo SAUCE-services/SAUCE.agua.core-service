@@ -9,9 +9,9 @@ import java.time.ZoneOffset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.DesconexionNotFoundException;
-import sauce.agua.rest.exception.LecturaNotFoundException;
-import sauce.agua.rest.exception.MedicionNotFoundException;
+import sauce.agua.rest.exception.DesconexionException;
+import sauce.agua.rest.exception.LecturaException;
+import sauce.agua.rest.exception.MedicionException;
 import sauce.agua.rest.model.Desconexion;
 import sauce.agua.rest.model.Lectura;
 import sauce.agua.rest.model.Medicion;
@@ -58,7 +58,7 @@ public class ConsumoService {
 
 		try {
 			desconexion = desconexionService.findByClienteId(clienteId, fechaEmision);
-		} catch (DesconexionNotFoundException e) {
+		} catch (DesconexionException e) {
 			desconexion = new Desconexion();
 		}
 
@@ -83,7 +83,7 @@ public class ConsumoService {
 
 		try {
 			lectura = lecturaService.findByMedidorId(medidorId, periodoId);
-		} catch (LecturaNotFoundException e) {
+		} catch (LecturaException e) {
 			lectura = new Lectura();
 		}
 
@@ -97,7 +97,7 @@ public class ConsumoService {
 				Medicion medicion = null;
 				try {
 					medicion = medicionService.findByClienteId(clienteId, lectura.getPeriodoId());
-				} catch (MedicionNotFoundException e) {
+				} catch (MedicionException e) {
 					medicion = new Medicion();
 				}
 
@@ -118,7 +118,7 @@ public class ConsumoService {
 			Medicion medicion = null;
 			try {
 				medicion = medicionService.findByClienteId(clienteId, periodoId);
-			} catch (MedicionNotFoundException e) {
+			} catch (MedicionException e) {
 				medicion = new Medicion();
 			}
 
@@ -139,7 +139,7 @@ public class ConsumoService {
 
 		try {
 			lectura = lecturaService.findPrevioByMedidorId(medidorId, periodoId);
-		} catch (LecturaNotFoundException e) {
+		} catch (LecturaException e) {
 			lectura = new Lectura();
 		}
 
@@ -153,7 +153,7 @@ public class ConsumoService {
 				Medicion medicion = null;
 				try {
 					medicion = medicionService.findByClienteId(clienteId, lectura.getPeriodoId());
-				} catch (MedicionNotFoundException e) {
+				} catch (MedicionException e) {
 					medicion = new Medicion();
 				}
 
@@ -174,7 +174,7 @@ public class ConsumoService {
 			Medicion medicion = null;
 			try {
 				medicion = medicionService.findByClienteId(clienteId, periodoId - 1);
-			} catch (MedicionNotFoundException e) {
+			} catch (MedicionException e) {
 				medicion = new Medicion();
 			}
 
