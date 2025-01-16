@@ -108,7 +108,7 @@ public class LiquidacionService {
 
 			Document document = new Document(new Rectangle(PageSize.A4));
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
-			document.setMargins(20, 20, 20, 20);
+			document.setMargins(40, 20, 40, 20);
 
 			document.open();
 
