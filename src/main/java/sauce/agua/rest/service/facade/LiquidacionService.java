@@ -3,6 +3,7 @@
  */
 package sauce.agua.rest.service.facade;
 
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
@@ -18,6 +19,8 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -35,6 +38,7 @@ import com.lowagie.text.pdf.BarcodeInter25;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.PdfPageEventHelper;
 
 import sauce.agua.rest.model.Cliente;
 import sauce.agua.rest.model.ClienteDato;
@@ -70,6 +74,17 @@ public class LiquidacionService {
 	private final ConsumoService consumoService;
 	private final ClienteDatoService clienteDatoService;
 
+	@Setter
+    @Getter
+    private static class MutableValue<T> {
+		private T value;
+		
+		public MutableValue(T initialValue) {
+			this.value = initialValue;
+		}
+
+    }
+
 	public LiquidacionService(Environment env, JavaMailSender sender, FacturaService facturaService,
 			DetalleService detalleService, ClienteService clienteService, PeriodoService periodoService,
 			MedidorService medidorService, ConsumoService consumoService, ClienteDatoService clienteDatoService) {
@@ -84,6 +99,7 @@ public class LiquidacionService {
 		this.clienteDatoService = clienteDatoService;
 	}
 
+	@Transactional
 	public String generatePdf(Integer prefijoId, Long facturaId) {
 		String path = env.getProperty("path.files");
 		String filename = path + "liquidacion." + prefijoId + "." + facturaId + ".pdf";
@@ -104,48 +120,55 @@ public class LiquidacionService {
 		String[] situacion = { "R.I.", "R.N.I.", "Cons.Final", "IVA Exento", "IVA No Resp.", "Monotributo" };
 		String[] categoria = { "General", "Especial" };
 
+		var grisClaro = new Color(220, 220, 220);
+
 		try {
 
 			Document document = new Document(new Rectangle(PageSize.A4));
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
-			document.setMargins(40, 20, 40, 20);
+			MutableValue<BigDecimal> totalRubros = new MutableValue<>(BigDecimal.ZERO);
+
+			writer.setPageEvent(new FooterPageEvent(cliente, factura, periodo, grisClaro, totalRubros));
+
+			document.setMargins(40, 20, 40, 30);
 
 			document.open();
 
 			// Tabla Cliente
-			float[] columnHeader = { 4, 6 };
+			float[] columnHeader = { 6, 4 };
 			PdfPTable tableHeader = new PdfPTable(columnHeader);
 			tableHeader.setWidthPercentage(100);
 
-			Paragraph paragraph = new Paragraph("Unión Vecinal de Servicios Públicos",
-					new Font(Font.HELVETICA, 12, Font.BOLD));
-			paragraph.add(new Phrase("\nE l   S a u c e", new Font(Font.HELVETICA, 16, Font.BOLD)));
-			PdfPCell cell = new PdfPCell(paragraph);
-			cell.setBorder(Rectangle.NO_BORDER);
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			cell.setVerticalAlignment(Element.ALIGN_CENTER);
-			cell.setLeading(0, 1.5f);
-			tableHeader.addCell(cell);
+			// Tabla Institucion
+			float[] columnInstitucion = { 2, 3 };
+			PdfPTable tableInstitucion = new PdfPTable(columnInstitucion);
+			tableInstitucion.setWidthPercentage(100);
 
-			paragraph = new Paragraph(MessageFormat.format("Liquidacion {0}/{1}", factura.getPrefijoId(),
-					new DecimalFormat("#0").format(factura.getFacturaId()), new Font(Font.HELVETICA, 8)));
+			Paragraph paragraph = new Paragraph("U.V.S.P.E.S.", new Font(Font.HELVETICA, 18, Font.BOLD));
+			PdfPCell cell = new PdfPCell(paragraph);
+			cell.setBackgroundColor(grisClaro);
+			tableInstitucion.addCell(cell);
+
+			paragraph = new Paragraph(new Phrase("UNIÓN VECINAL DE SERVICIOS PÚBLICOS EL SAUCE", new Font(Font.HELVETICA, 10, Font.BOLD)));
+			paragraph.add(new Phrase("\nALFONSO X 47 - EL SAUCE", new Font(Font.HELVETICA, 8)));
+			paragraph.add(new Phrase("\nC.P. 5533 - MENDOZA - TEL 261-6532452", new Font(Font.HELVETICA, 8)));
+			paragraph.add(new Phrase("\nC.U.I.T. No 30-69577316-8 - ING. BRUTOS 185", new Font(Font.HELVETICA, 8)));
+			paragraph.add(new Phrase("\nIVA Resp. Inscripto No. EPAS N A 1", new Font(Font.HELVETICA, 8)));
+			cell = new PdfPCell(paragraph);
+			cell.setBackgroundColor(grisClaro);
+			tableInstitucion.addCell(cell);
+			cell.setBackgroundColor(grisClaro);
+			tableHeader.addCell(tableInstitucion);
+
+			paragraph = new Paragraph(MessageFormat.format("Liquidacion: {0}/{1}", factura.getPrefijoId(),
+					new DecimalFormat("#0").format(factura.getFacturaId())), new Font(Font.HELVETICA, 8));
 			paragraph.add(new Paragraph(
-					"\n" + DateTimeFormatter.ofPattern("dd/MM/yyyy")
+					"\nEmisión: " + DateTimeFormatter.ofPattern("dd/MM/yyyy")
 							.format(factura.getFecha().withOffsetSameInstant(ZoneOffset.UTC)),
 					new Font(Font.HELVETICA, 8)));
-			cell = new PdfPCell(paragraph);
-			cell.setBorder(Rectangle.NO_BORDER);
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			cell.setVerticalAlignment(Element.ALIGN_CENTER);
-			cell.setLeading(0, 1.5f);
-			tableHeader.addCell(cell);
-
-			cell = new PdfPCell();
-			cell.setBorder(Rectangle.NO_BORDER);
-			tableHeader.addCell(cell);
-			paragraph = new Paragraph(
+			paragraph.add(new Paragraph(
 					MessageFormat.format("Usuario: {0}, {1}", cliente.getApellido(), cliente.getNombre()),
-					new Font(Font.HELVETICA, 9, Font.BOLD));
+					new Font(Font.HELVETICA, 9, Font.BOLD)));
 			paragraph.add(new Phrase(
 					"\n" + MessageFormat.format("Domicilio: {0} {1} {2} {3} {4} ({5})", cliente.getInmuebleCalle(),
 							cliente.getInmueblePuerta(), cliente.getInmueblePiso(), cliente.getInmuebleDpto(),
@@ -164,14 +187,10 @@ public class LiquidacionService {
 									situacion[cliente.getSituacionIva() - 1], cliente.getNumeroSocio()),
 							new Font(Font.HELVETICA, 8)));
 			cell = new PdfPCell(paragraph);
-			cell.setBorder(Rectangle.NO_BORDER);
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			cell.setVerticalAlignment(Element.ALIGN_CENTER);
-			cell.setLeading(0, 1.5f);
+			cell.setBackgroundColor(grisClaro);
 			tableHeader.addCell(cell);
-			document.add(tableHeader);
 
-			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
+			document.add(tableHeader);
 
 			paragraph = new Paragraph("Liquidación de Servicios Públicos Agua/Cloaca",
 					new Font(Font.HELVETICA, 12, Font.BOLD));
@@ -239,8 +258,6 @@ public class LiquidacionService {
 			table.addCell(cell);
 			document.add(table);
 
-			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
-
 			// Consumo
 			float[] columnConsumo = { 1, 1, 1, 1, 1, 1 };
 			PdfPTable tableConsumo = new PdfPTable(columnConsumo);
@@ -302,44 +319,43 @@ public class LiquidacionService {
 			tableConsumo.addCell(cell);
 			document.add(tableConsumo);
 
-			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
-
 			// Rubros
 			float[] columnRubros = { 1, 12, 2, 2, 2 };
 			PdfPTable tableRubros = new PdfPTable(columnRubros);
 			tableRubros.setWidthPercentage(100);
 			cell = new PdfPCell(new Paragraph("#", new Font(Font.HELVETICA, 9, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);
 			cell.setLeading(0, 1.5f);
 			tableRubros.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Rubro", new Font(Font.HELVETICA, 9, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);
 			cell.setLeading(0, 1.5f);
 			tableRubros.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Cantidad", new Font(Font.HELVETICA, 9, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);
 			cell.setLeading(0, 1.5f);
 			tableRubros.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Unitario", new Font(Font.HELVETICA, 9, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);
 			cell.setLeading(0, 1.5f);
 			tableRubros.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Subtotal", new Font(Font.HELVETICA, 9, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);
 			cell.setLeading(0, 1.5f);
 			tableRubros.addCell(cell);
 
-			BigDecimal total = BigDecimal.ZERO;
-			int countRows = 20;
-
 			// Lista rubros
 			for (Detalle detalle : detalleService.findAllByFactura(prefijoId, facturaId)) {
-				countRows -= 1;
 				cell = new PdfPCell(new Paragraph(detalle.getRubroId().toString(), new Font(Font.HELVETICA, 9)));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -364,24 +380,13 @@ public class LiquidacionService {
 				tableRubros.addCell(cell);
 				BigDecimal subtotal = detalle.getPrecioUnitario().multiply(detalle.getCantidad()).setScale(2,
 						RoundingMode.HALF_UP);
-				total = total.add(subtotal).setScale(2, RoundingMode.HALF_UP);
+				totalRubros.setValue(totalRubros.getValue().add(subtotal).setScale(2, RoundingMode.HALF_UP));
 				cell = new PdfPCell(
 						new Paragraph(new DecimalFormat("#,##0.00").format(subtotal), new Font(Font.HELVETICA, 9)));
 				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				cell.setVerticalAlignment(Element.ALIGN_CENTER);
 				cell.setLeading(0, 1.5f);
 				tableRubros.addCell(cell);
-			}
-			// Lista espacios en blanco para llenar la hoja
-			for (int counter = countRows; counter >= 0; counter -= 1) {
-				for (int counterCell = 0; counterCell < 3; counterCell++) {
-					cell = new PdfPCell(new Paragraph(" ", new Font(Font.HELVETICA, 9)));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_CENTER);
-					cell.setBorder(Rectangle.NO_BORDER);
-					cell.setLeading(0, 1.5f);
-					tableRubros.addCell(cell);
-				}
 			}
 			document.add(tableRubros);
 
@@ -413,26 +418,32 @@ public class LiquidacionService {
 			tableDeuda.setWidthPercentage(100);
 
 			cell = new PdfPCell(new Paragraph("Liquidación", new Font(Font.HELVETICA, 8, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setBorder(Rectangle.NO_BORDER);
 			tableDeuda.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Período", new Font(Font.HELVETICA, 8, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setBorder(Rectangle.NO_BORDER);
 			tableDeuda.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Vencimiento", new Font(Font.HELVETICA, 8, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setBorder(Rectangle.NO_BORDER);
 			tableDeuda.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Imp.Venc.", new Font(Font.HELVETICA, 8, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setBorder(Rectangle.NO_BORDER);
 			tableDeuda.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Intereses", new Font(Font.HELVETICA, 8, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setBorder(Rectangle.NO_BORDER);
 			tableDeuda.addCell(cell);
 			cell = new PdfPCell(new Paragraph("Total", new Font(Font.HELVETICA, 8, Font.BOLD)));
+			cell.setBackgroundColor(grisClaro);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setBorder(Rectangle.NO_BORDER);
 			tableDeuda.addCell(cell);
@@ -486,7 +497,7 @@ public class LiquidacionService {
 			// Totales
 			paragraph = new Paragraph("Total Rubros: ", new Font(Font.HELVETICA, 9));
 			paragraph.add(
-					new Phrase(new DecimalFormat("#,##0.00").format(total), new Font(Font.HELVETICA, 11, Font.BOLD)));
+					new Phrase(new DecimalFormat("#,##0.00").format(totalRubros.getValue()), new Font(Font.HELVETICA, 11, Font.BOLD)));
 			paragraph.add(new Phrase("\n"));
 			paragraph.add(new Phrase("IVA CF: ", new Font(Font.HELVETICA, 9)));
 			paragraph.add(new Phrase(new DecimalFormat("#,##0.00").format(factura.getIvaCf()),
@@ -516,8 +527,6 @@ public class LiquidacionService {
 			tableTotales.addCell(cell);
 			document.add(tableTotales);
 
-			document.add(new Paragraph(" ", new Font(Font.HELVETICA, 12)));
-
 			// Código de Barras
 			BarcodeInter25 code25 = new BarcodeInter25();
 			code25.setGenerateChecksum(false);
@@ -531,12 +540,173 @@ public class LiquidacionService {
 			//
 			document.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.debug("FileNotFoundException: {}", e.getMessage());
 		}
 
 		return filename;
 	}
 
+	private class FooterPageEvent extends PdfPageEventHelper {
+
+		private final Cliente cliente;
+		private final Factura factura;
+		private final Periodo periodo;
+		private final Color grisClaro;
+		private final MutableValue<BigDecimal> totalRubros;
+
+		public FooterPageEvent(Cliente cliente,
+							   Factura factura,
+							   Periodo periodo,
+							   Color grisClaro,
+							   MutableValue<BigDecimal> totalRubros) {
+			this.cliente = cliente;
+			this.factura = factura;
+			this.periodo = periodo;
+			this.grisClaro = grisClaro;
+			this.totalRubros = totalRubros;
+		}
+
+		public void onEndPage(PdfWriter writer, Document document) {
+			try {
+				PdfPTable footer = new PdfPTable(2);
+				footer.setWidthPercentage(100);
+				footer.setTotalWidth(document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
+				
+				var paragraph = new Paragraph(new Phrase("U.V.S.P.E.S.", new Font(Font.HELVETICA, 9, Font.BOLD)));
+				paragraph.add(new Phrase(" Unión Vecinal de Servicios Públicos El Sauce", new Font(Font.HELVETICA, 8)));
+				var cell = new PdfPCell(paragraph);
+				footer.addCell(cell);
+
+				footer.addCell(cell);
+
+				// Cliente
+				float[] widthCliente = { 1, 1, 2 };
+				PdfPTable tableCliente = new PdfPTable(widthCliente);
+				tableCliente.setWidthPercentage(100);
+				paragraph = new Paragraph(new Phrase("Liquidación", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				tableCliente.addCell(cell);
+				paragraph = new Paragraph(new Phrase("Emisión", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				tableCliente.addCell(cell);
+				paragraph = new Paragraph(new Phrase("Usuario", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				tableCliente.addCell(cell);
+				footer.addCell(tableCliente);
+
+				footer.addCell(tableCliente);
+
+				tableCliente = new PdfPTable(widthCliente);
+				tableCliente.setWidthPercentage(100);
+				paragraph = new Paragraph(new Phrase(MessageFormat.format("{0}/{1}", factura.getPrefijoId(),
+						new DecimalFormat("#0").format(factura.getFacturaId())), new Font(Font.HELVETICA, 8, Font.BOLD)));
+				cell = new PdfPCell(paragraph);
+				tableCliente.addCell(cell);
+				paragraph = new Paragraph(DateTimeFormatter.ofPattern("dd/MM/yyyy")
+						.format(factura.getFecha().withOffsetSameInstant(ZoneOffset.UTC)), new Font(Font.HELVETICA, 8, Font.BOLD));
+				cell = new PdfPCell(paragraph);
+				tableCliente.addCell(cell);
+				paragraph = new Paragraph(MessageFormat.format("{0}, {1}", cliente.getApellido(), cliente.getNombre()), new Font(Font.HELVETICA, 8, Font.BOLD));
+				cell = new PdfPCell(paragraph);
+				tableCliente.addCell(cell);
+				footer.addCell(tableCliente);
+
+				footer.addCell(tableCliente);
+
+				// Datos
+				var footerData = new PdfPTable(4);
+				footerData.setWidthPercentage(100);
+				paragraph = new Paragraph(new Phrase("Cliente", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new Phrase("Periodo", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new Phrase("1er Venc.", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new Phrase("2do Venc.", new Font(Font.HELVETICA, 8)));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				footer.addCell(footerData);
+
+				footer.addCell(footerData);
+
+				footerData = new PdfPTable(4);
+				footerData.setWidthPercentage(100);
+				paragraph = new Paragraph(new Phrase(cliente.getClienteId().toString(), new Font(Font.HELVETICA, 8, Font.BOLD)));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new Phrase(periodo.getDescripcion(), new Font(Font.HELVETICA, 8, Font.BOLD)));
+				cell = new PdfPCell(paragraph);
+				cell.setNoWrap(true);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new Phrase(DateTimeFormatter.ofPattern("dd/MM/yyyy")
+						.format(periodo.getFechaPrimero().withOffsetSameInstant(ZoneOffset.UTC)), new Font(Font.HELVETICA, 8, Font.BOLD)));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new Phrase(DateTimeFormatter.ofPattern("dd/MM/yyyy")
+						.format(periodo.getFechaSegundo().withOffsetSameInstant(ZoneOffset.UTC)), new Font(Font.HELVETICA, 8, Font.BOLD)));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				footer.addCell(footerData);
+
+				footer.addCell(footerData);
+
+				footerData = new PdfPTable(4);
+				footerData.setWidthPercentage(100);
+				paragraph = new Paragraph("Servicio", new Font(Font.HELVETICA, 8));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				paragraph = new Paragraph("IVA", new Font(Font.HELVETICA, 8));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				paragraph = new Paragraph("Importe", new Font(Font.HELVETICA, 8));
+				cell = new PdfPCell(paragraph);
+				cell.setBackgroundColor(grisClaro);
+				footerData.addCell(cell);
+				footerData.addCell(cell);
+				footer.addCell(footerData);
+
+				footer.addCell(footerData);
+
+				footerData = new PdfPTable(4);
+				footerData.setWidthPercentage(100);
+				paragraph = new Paragraph(new DecimalFormat("#,##0.00").format(totalRubros.getValue()), new Font(Font.HELVETICA, 8, Font.BOLD));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new DecimalFormat("#,##0.00").format(factura.getIvaCf().add(factura.getIvaRi()).add(factura.getIvaRn())), new Font(Font.HELVETICA, 8, Font.BOLD));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new DecimalFormat("#,##0.00").format(factura.getTotal()), new Font(Font.HELVETICA, 8, Font.BOLD));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				paragraph = new Paragraph(new DecimalFormat("#,##0.00")
+						.format(factura.getTotal().add(factura.getInteres()).setScale(2, RoundingMode.HALF_UP)), new Font(Font.HELVETICA, 8, Font.BOLD));
+				cell = new PdfPCell(paragraph);
+				footerData.addCell(cell);
+				footer.addCell(footerData);
+
+				footer.addCell(footerData);
+
+				footer.writeSelectedRows(0, -1, document.leftMargin(),
+						document.bottomMargin() + 100, writer.getDirectContent());
+			} catch (Exception e) {
+				log.error("Error al generar footer: {}", e.getMessage());
+			}
+		}
+	}
+
+	@Transactional
 	public String sendLiquidacion(Integer prefijoId, Long facturaId) throws MessagingException {
 		String filenameLiquidacion = this.generatePdf(prefijoId, facturaId);
         log.info("Filename_liquidacion -> {}", filenameLiquidacion);
@@ -575,7 +745,7 @@ public class LiquidacionService {
 			helper.addAttachment(filenameLiquidacion, fileBono);
 
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			log.debug("MessagingException: {}", e.getMessage());
 			return "ERROR: No pudo ENVIARSE";
 		}
 
