@@ -152,8 +152,8 @@ public class LiquidacionService {
 			paragraph = new Paragraph(new Phrase("UNIÓN VECINAL DE SERVICIOS PÚBLICOS EL SAUCE", new Font(Font.HELVETICA, 10, Font.BOLD)));
 			paragraph.add(new Phrase("\nALFONSO X 47 - EL SAUCE", new Font(Font.HELVETICA, 8)));
 			paragraph.add(new Phrase("\nC.P. 5533 - MENDOZA - TEL 261-6532452", new Font(Font.HELVETICA, 8)));
-			paragraph.add(new Phrase("\nC.U.I.T. No 30-69577316-8 - ING. BRUTOS 185", new Font(Font.HELVETICA, 8)));
-			paragraph.add(new Phrase("\nIVA Resp. Inscripto No. EPAS N A 1", new Font(Font.HELVETICA, 8)));
+			paragraph.add(new Phrase("\nC.U.I.T. No 30-69577316-8 - ING. BRUTOS EXCEPTUADO", new Font(Font.HELVETICA, 8)));
+			paragraph.add(new Phrase("\nIVA Resp. Inscripto", new Font(Font.HELVETICA, 8)));
 			cell = new PdfPCell(paragraph);
 			cell.setBackgroundColor(grisClaro);
 			tableInstitucion.addCell(cell);
