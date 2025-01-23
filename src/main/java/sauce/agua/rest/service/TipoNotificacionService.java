@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.TipoNotificacionException;
 import sauce.agua.rest.model.TipoNotificacion;
-import sauce.agua.rest.repository.ITipoNotificacionRepository;
+import sauce.agua.rest.repository.TipoNotificacionRepository;
 
 /**
  * @author daniel
@@ -20,7 +20,7 @@ import sauce.agua.rest.repository.ITipoNotificacionRepository;
 public class TipoNotificacionService {
 
 	@Autowired
-	private ITipoNotificacionRepository repository;
+	private TipoNotificacionRepository repository;
 
 	public List<TipoNotificacion> findAll() {
 		return repository.findAll();

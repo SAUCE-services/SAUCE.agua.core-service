@@ -35,7 +35,7 @@ public class ClienteDatoController {
 	@GetMapping("/{clienteId}")
 	public ResponseEntity<ClienteDato> findByClienteId(@PathVariable Long clienteId) {
 		try {
-			return new ResponseEntity<ClienteDato>(service.findByClienteId(clienteId), HttpStatus.OK);
+			return new ResponseEntity<>(service.findByClienteId(clienteId), HttpStatus.OK);
 		} catch (ClienteDatoException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -43,12 +43,12 @@ public class ClienteDatoController {
 
 	@PostMapping("/")
 	public ResponseEntity<ClienteDato> add(@RequestBody ClienteDato clienteDato) {
-		return new ResponseEntity<ClienteDato>(service.add(clienteDato), HttpStatus.OK);
+		return new ResponseEntity<>(service.add(clienteDato), HttpStatus.OK);
 	}
 
 	@PutMapping("/{clienteId}")
 	public ResponseEntity<ClienteDato> update(@RequestBody ClienteDato clienteDato, @PathVariable Long clienteId) {
-		return new ResponseEntity<ClienteDato>(service.update(clienteDato, clienteId), HttpStatus.OK);
+		return new ResponseEntity<>(service.update(clienteDato, clienteId), HttpStatus.OK);
 	}
 
 }

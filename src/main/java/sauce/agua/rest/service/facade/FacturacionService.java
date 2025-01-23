@@ -18,11 +18,11 @@ import sauce.agua.rest.model.Factura;
 import sauce.agua.rest.model.Novedad;
 import sauce.agua.rest.model.Periodo;
 import sauce.agua.rest.model.Rubro;
-import sauce.agua.rest.repository.IDetalleRepository;
-import sauce.agua.rest.repository.IFacturaRepository;
-import sauce.agua.rest.repository.INovedadRepository;
-import sauce.agua.rest.repository.IPeriodoRepository;
-import sauce.agua.rest.repository.IRubroRepository;
+import sauce.agua.rest.repository.DetalleRepository;
+import sauce.agua.rest.repository.FacturaRepository;
+import sauce.agua.rest.repository.NovedadRepository;
+import sauce.agua.rest.repository.PeriodoRepository;
+import sauce.agua.rest.repository.RubroRepository;
 import sauce.agua.rest.util.Tool;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,19 +34,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FacturacionService {
 	@Autowired
-	private IRubroRepository rubrorepository;
+	private RubroRepository rubrorepository;
 
 	@Autowired
-	private IPeriodoRepository periodorepository;
+	private PeriodoRepository periodorepository;
 
 	@Autowired
-	private IFacturaRepository facturarepository;
+	private FacturaRepository facturarepository;
 
 	@Autowired
-	private IDetalleRepository detallerepository;
+	private DetalleRepository detallerepository;
 
 	@Autowired
-	private INovedadRepository novedadrepository;
+	private NovedadRepository novedadrepository;
 
 	@Transactional
 	public void adjust(Integer prefijoId, Long facturaId, Integer decimals) {

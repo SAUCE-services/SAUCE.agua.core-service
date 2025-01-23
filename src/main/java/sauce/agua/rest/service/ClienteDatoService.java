@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.ClienteDatoException;
 import sauce.agua.rest.model.ClienteDato;
-import sauce.agua.rest.repository.IClienteDatoRepository;
+import sauce.agua.rest.repository.ClienteDatoRepository;
 
 /**
  * @author daniel
@@ -18,7 +18,7 @@ import sauce.agua.rest.repository.IClienteDatoRepository;
 public class ClienteDatoService {
 
 	@Autowired
-	private IClienteDatoRepository repository;
+	private ClienteDatoRepository repository;
 
 	public ClienteDato findByClienteId(Long clienteId) {
 		return repository.findByClienteId(clienteId).orElseThrow(() -> new ClienteDatoException(clienteId));

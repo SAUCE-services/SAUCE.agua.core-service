@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.LecturaException;
 import sauce.agua.rest.model.Lectura;
-import sauce.agua.rest.repository.ILecturaRepository;
+import sauce.agua.rest.repository.LecturaRepository;
 
 /**
  * @author daniel
@@ -18,7 +18,7 @@ import sauce.agua.rest.repository.ILecturaRepository;
 public class LecturaService {
 
 	@Autowired
-	private ILecturaRepository repository;
+	private LecturaRepository repository;
 
 	public Lectura findByMedidorId(String medidorId, Integer periodoId) {
 		return repository.findByMedidorIdAndPeriodoId(medidorId, periodoId)

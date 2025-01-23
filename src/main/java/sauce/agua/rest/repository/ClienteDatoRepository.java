@@ -15,8 +15,8 @@ import sauce.agua.rest.model.ClienteDato;
  *
  */
 @Repository
-public interface IClienteDatoRepository extends JpaRepository<ClienteDato, Long> {
+public interface ClienteDatoRepository extends JpaRepository<ClienteDato, Long> {
 
-	public Optional<ClienteDato> findByClienteId(Long clienteId);
+	Optional<ClienteDato> findByClienteId(Long clienteId);
 
 }

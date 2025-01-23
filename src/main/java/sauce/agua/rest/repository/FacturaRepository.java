@@ -17,7 +17,7 @@ import sauce.agua.rest.model.pk.FacturaPk;
  *
  */
 @Repository
-public interface IFacturaRepository extends JpaRepository<Factura, FacturaPk> {
+public interface FacturaRepository extends JpaRepository<Factura, FacturaPk> {
 	public List<Factura> findAllByPeriodoIdAndAnulada(Integer periodoId, Byte anulada);
 
 	public List<Factura> findAllByPeriodoIdAndPagadaAndAnuladaAndCanceladaAndClienteIdIn(Integer periodoId, Byte pagada,

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.NotificacionException;
 import sauce.agua.rest.model.Notificacion;
-import sauce.agua.rest.repository.INotificacionRepository;
+import sauce.agua.rest.repository.NotificacionRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NotificacionService {
 
 	@Autowired
-	private INotificacionRepository repository;
+	private NotificacionRepository repository;
 
 	public List<Notificacion> findAllByFecha(OffsetDateTime fecha) {
 		return repository.findAllByFecha(fecha);

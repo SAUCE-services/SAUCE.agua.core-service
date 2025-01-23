@@ -26,7 +26,7 @@ import sauce.agua.rest.model.view.DeudorPlanCorte;
 import sauce.agua.rest.model.view.SocioActivo;
 import sauce.agua.rest.model.view.SocioActivoConCuotaFija;
 import sauce.agua.rest.model.view.SocioActivoConMedidor;
-import sauce.agua.rest.repository.IClienteRepository;
+import sauce.agua.rest.repository.ClienteRepository;
 import sauce.agua.rest.repository.view.IActivoConMedidorRepository;
 import sauce.agua.rest.repository.view.IClienteRecorridoRepository;
 import sauce.agua.rest.repository.view.IClienteSearchRepository;
@@ -48,7 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ClienteService {
 
 	@Autowired
-	private IClienteRepository repository;
+	private ClienteRepository repository;
 
 	@Autowired
 	private IClienteSearchRepository clientesearchrepository;

@@ -15,7 +15,7 @@ import sauce.agua.rest.model.Lectura;
  *
  */
 @Repository
-public interface ILecturaRepository extends JpaRepository<Lectura, Long> {
+public interface LecturaRepository extends JpaRepository<Lectura, Long> {
 
 	public Optional<Lectura> findByMedidorIdAndPeriodoId(String medidorId, Integer periodoId);
 

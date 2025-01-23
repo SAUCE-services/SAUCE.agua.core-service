@@ -3,6 +3,7 @@
  */
 package sauce.agua.rest.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -29,7 +30,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table
 @EqualsAndHashCode(callSuper = false)
 @IdClass(value = FacturaPk.class)
 @NoArgsConstructor
@@ -38,6 +38,7 @@ public class Factura extends Auditable implements Serializable {
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 3959463435349429544L;
 
 	@Id
