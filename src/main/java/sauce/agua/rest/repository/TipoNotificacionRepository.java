@@ -8,16 +8,15 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import sauce.agua.rest.model.Rubro;
-import sauce.agua.rest.model.pk.RubroPk;
+import sauce.agua.rest.model.TipoNotificacion;
 
 /**
  * @author daniel
  *
  */
 @Repository
-public interface IRubroRepository extends JpaRepository<Rubro, RubroPk> {
+public interface TipoNotificacionRepository extends JpaRepository<TipoNotificacion, Integer> {
 
-	public Optional<Rubro> findTopByRubroId(Integer rubroId);
+	public Optional<TipoNotificacion> findByTiponotificacionId(Integer tiponotificacionId);
 
 }

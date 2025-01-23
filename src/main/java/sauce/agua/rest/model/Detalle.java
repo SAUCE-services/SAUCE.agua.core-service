@@ -3,6 +3,7 @@
  */
 package sauce.agua.rest.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -33,6 +34,7 @@ public class Detalle extends Auditable implements Serializable {
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 7363171736163383427L;
 
 	@Id

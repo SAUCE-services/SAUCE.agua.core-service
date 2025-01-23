@@ -17,7 +17,7 @@ import sauce.agua.rest.model.pk.DetallePk;
  *
  */
 @Repository
-public interface IDetalleRepository extends JpaRepository<Detalle, DetallePk> {
+public interface DetalleRepository extends JpaRepository<Detalle, DetallePk> {
 
 	public List<Detalle> findAllByPrefijoIdAndFacturaIdOrderByRubroId(Integer prefijoId, Long facturaId);
 

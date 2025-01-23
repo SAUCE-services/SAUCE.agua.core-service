@@ -16,7 +16,7 @@ import sauce.agua.rest.model.Medidor;
  *
  */
 @Repository
-public interface IMedidorRepository extends JpaRepository<Medidor, Long> {
+public interface MedidorRepository extends JpaRepository<Medidor, Long> {
 
 	public Optional<Medidor> findTopByClienteId(Long clienteId, Sort sort);
 

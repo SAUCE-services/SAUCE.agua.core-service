@@ -3,12 +3,11 @@
  */
 package sauce.agua.rest.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.MedicionException;
 import sauce.agua.rest.model.Medicion;
-import sauce.agua.rest.repository.IMedicionRepository;
+import sauce.agua.rest.repository.MedicionRepository;
 
 /**
  * @author daniel
@@ -17,8 +16,11 @@ import sauce.agua.rest.repository.IMedicionRepository;
 @Service
 public class MedicionService {
 
-	@Autowired
-	private IMedicionRepository repository;
+	private final MedicionRepository repository;
+
+	public MedicionService(MedicionRepository repository) {
+		this.repository = repository;
+	}
 
 	public Medicion findByClienteId(Long clienteId, Integer periodoId) {
 		return repository.findByClienteIdAndPeriodoId(clienteId, periodoId)

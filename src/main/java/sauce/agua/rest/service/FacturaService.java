@@ -6,43 +6,56 @@ package sauce.agua.rest.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.FacturaException;
 import sauce.agua.rest.model.Cliente;
 import sauce.agua.rest.model.Factura;
-import sauce.agua.rest.repository.IClienteRepository;
-import sauce.agua.rest.repository.IFacturaRepository;
+import sauce.agua.rest.repository.FacturaRepository;
 
 /**
  * @author daniel
  *
  */
 @Service
+@Slf4j
 public class FacturaService {
-	@Autowired
-	private IFacturaRepository repository;
 
-	@Autowired
-	private IClienteRepository clienterepository;
+	private final FacturaRepository repository;
+	private final ClienteService clienteService;
+
+	public FacturaService(FacturaRepository repository,
+						  ClienteService clienteService) {
+		this.repository = repository;
+		this.clienteService = clienteService;
+	}
 
 	public List<Factura> findAllByPeriodoId(Integer periodoId) {
 		return repository.findAllByPeriodoIdAndAnulada(periodoId, (byte) 0);
 	}
 
 	public List<Factura> findAllByPeriodoIdAndZona(Integer periodoId, Integer zona) {
-		List<Factura> facturas = new ArrayList<Factura>();
-		Map<Long, Cliente> clientes = clienterepository.findAllByFechaBajaIsNull(Sort.by("clienteId").ascending())
-				.stream().collect(Collectors.toMap(Cliente::getClienteId, cliente -> cliente));
-		for (Factura factura : repository.findAllByPeriodoIdAndAnulada(periodoId, (byte) 0)) {
-			if (clientes.get(factura.getClienteId()).getZona() == zona)
-				facturas.add(factura);
-		}
-		return facturas;
+		log.debug("Processing findAllByPeriodoIdAndZona: periodoId={}, zona={}", periodoId, zona);
+		
+		// Obtener clientes activos de la zona y convertir a Map una sola vez
+		Map<Long, Cliente> clientesZona = clienteService.findAllActivosZona(zona)
+				.stream()
+				.filter(cliente -> Objects.equals(cliente.getZona(), zona))
+				.peek(this::logCliente)
+				.collect(Collectors.toMap(Cliente::getClienteId, cliente -> cliente));
+
+		// Filtrar facturas usando el Map de clientes
+		return repository.findAllByPeriodoIdAndAnulada(periodoId, (byte) 0)
+				.stream()
+				.filter(factura -> clientesZona.containsKey(factura.getClienteId()))
+				.peek(this::logFactura)
+				.collect(Collectors.toList());
 	}
 
 	public List<Factura> findAllDeudaByPeriodoIdAndClienteIds(Integer periodoId, List<Long> clienteIds) {
@@ -62,6 +75,22 @@ public class FacturaService {
 	public Factura findByFactura(Integer prefijoId, Long facturaId) {
 		return repository.findByPrefijoIdAndFacturaId(prefijoId, facturaId)
 				.orElseThrow(() -> new FacturaException(prefijoId, facturaId));
+	}
+
+	private void logCliente(Cliente cliente) {
+		try {
+			log.debug("Cliente: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(cliente));
+		} catch (JsonProcessingException e) {
+			log.debug("Cliente jsonify error: {}", e.getMessage());
+		}
+	}
+
+	private void logFactura(Factura factura) {
+		try {
+			log.debug("Factura: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(factura));
+		} catch (JsonProcessingException e) {
+			log.debug("Factura jsonify error: {}", e.getMessage());
+		}
 	}
 
 }

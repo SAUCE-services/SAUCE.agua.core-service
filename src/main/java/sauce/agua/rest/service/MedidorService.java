@@ -5,13 +5,12 @@ package sauce.agua.rest.service;
 
 import java.time.OffsetDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.MedidorException;
 import sauce.agua.rest.model.Medidor;
-import sauce.agua.rest.repository.IMedidorRepository;
+import sauce.agua.rest.repository.MedidorRepository;
 
 /**
  * @author daniel
@@ -20,8 +19,11 @@ import sauce.agua.rest.repository.IMedidorRepository;
 @Service
 public class MedidorService {
 
-	@Autowired
-	private IMedidorRepository repository;
+	private final MedidorRepository repository;
+
+	public MedidorService(MedidorRepository repository) {
+		this.repository = repository;
+	}
 
 	public Medidor findByClienteId(Long clienteId, Boolean colocado) {
 		Medidor medidor = repository
@@ -29,7 +31,7 @@ public class MedidorService {
 						Sort.by("fechaAlta").descending().and(Sort.by("fechaColocacion").descending()))
 				.orElse(new Medidor());
 		if (medidor.getFechaRetiro() != null) {
-			if (colocado && medidor.getFechaRetiro().compareTo(OffsetDateTime.now()) <= 0) {
+			if (colocado && !medidor.getFechaRetiro().isAfter(OffsetDateTime.now())) {
 				return new Medidor();
 			}
 		}
@@ -54,4 +56,5 @@ public class MedidorService {
 						Sort.by("fechaAlta").descending().and(Sort.by("fechaColocacion").descending()))
 				.orElseThrow(() -> new MedidorException(clienteId, "Colocado"));
 	}
+
 }

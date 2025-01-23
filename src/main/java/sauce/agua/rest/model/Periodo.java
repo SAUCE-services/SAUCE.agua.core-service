@@ -3,6 +3,7 @@
  */
 package sauce.agua.rest.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -32,6 +33,7 @@ public class Periodo extends Auditable implements Serializable {
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 8398649671543020277L;
 
 	@Id

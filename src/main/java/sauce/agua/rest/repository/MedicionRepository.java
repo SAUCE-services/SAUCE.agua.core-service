@@ -15,7 +15,7 @@ import sauce.agua.rest.model.Medicion;
  *
  */
 @Repository
-public interface IMedicionRepository extends JpaRepository<Medicion, Long> {
+public interface MedicionRepository extends JpaRepository<Medicion, Long> {
 
 	public Optional<Medicion> findByUniqueId(Long uniqueId);
 

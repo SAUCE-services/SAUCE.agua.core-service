@@ -166,4 +166,5 @@ public class ClienteController {
 	public ResponseEntity<Cliente> update(@RequestBody Cliente cliente, @PathVariable Long uniqueId) {
 		return new ResponseEntity<>(service.update(cliente, uniqueId), HttpStatus.OK);
 	}
+
 }

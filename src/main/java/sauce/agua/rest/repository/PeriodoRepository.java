@@ -17,7 +17,7 @@ import sauce.agua.rest.model.Periodo;
  *
  */
 @Repository
-public interface IPeriodoRepository extends JpaRepository<Periodo, Integer> {
+public interface PeriodoRepository extends JpaRepository<Periodo, Integer> {
 
 	public Optional<Periodo> findByPeriodoId(Integer periodoId);
 

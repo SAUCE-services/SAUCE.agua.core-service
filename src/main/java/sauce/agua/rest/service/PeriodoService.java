@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import sauce.agua.rest.exception.PeriodoException;
 import sauce.agua.rest.model.Periodo;
 import sauce.agua.rest.model.view.PeriodoPago;
-import sauce.agua.rest.repository.IPeriodoRepository;
+import sauce.agua.rest.repository.PeriodoRepository;
 import sauce.agua.rest.repository.view.IPeriodoPagoRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PeriodoService {
 
-	private final IPeriodoRepository repository;
+	private final PeriodoRepository repository;
 	private final IPeriodoPagoRepository periodopagorepository;
 
-	public PeriodoService(IPeriodoRepository repository, IPeriodoPagoRepository periodopagorepository) {
+	public PeriodoService(PeriodoRepository repository, IPeriodoPagoRepository periodopagorepository) {
 		this.repository = repository;
 		this.periodopagorepository = periodopagorepository;
 	}

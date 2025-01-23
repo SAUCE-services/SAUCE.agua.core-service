@@ -17,7 +17,7 @@ import sauce.agua.rest.model.Cliente;
  *
  */
 @Repository
-public interface IClienteRepository extends JpaRepository<Cliente, Long> {
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
 	public List<Cliente> findAllByClienteId(Long clienteId, Sort sort);
 

@@ -18,7 +18,7 @@ import sauce.agua.rest.model.pk.NotificacionPk;
  *
  */
 @Repository
-public interface INotificacionRepository extends JpaRepository<Notificacion, NotificacionPk> {
+public interface NotificacionRepository extends JpaRepository<Notificacion, NotificacionPk> {
 
 	public List<Notificacion> findAllByFecha(OffsetDateTime fecha);
 

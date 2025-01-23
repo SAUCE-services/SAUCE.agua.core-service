@@ -3,6 +3,7 @@
  */
 package sauce.agua.rest.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
@@ -31,6 +32,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Medidor extends Auditable implements Serializable {
 	
+	@Serial
 	private static final long serialVersionUID = -5168150973849285042L;
 
 	@Id

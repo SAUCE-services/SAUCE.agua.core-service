@@ -16,7 +16,7 @@ import sauce.agua.rest.model.pk.NovedadPk;
  *
  */
 @Repository
-public interface INovedadRepository extends JpaRepository<Novedad, NovedadPk> {
+public interface NovedadRepository extends JpaRepository<Novedad, NovedadPk> {
 
 	public Optional<Novedad> findByClienteIdAndPeriodoIdAndRubroId(Long clienteId, Integer periodoId, Integer rubroId);
 

@@ -3,6 +3,7 @@
  */
 package sauce.agua.rest.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClienteDato extends Auditable implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = -4023845692833032325L;
 
 	@Id

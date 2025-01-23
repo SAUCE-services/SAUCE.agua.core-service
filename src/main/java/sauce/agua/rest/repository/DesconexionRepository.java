@@ -16,7 +16,7 @@ import sauce.agua.rest.model.Desconexion;
  *
  */
 @Repository
-public interface IDesconexionRepository extends JpaRepository<Desconexion, Long> {
+public interface DesconexionRepository extends JpaRepository<Desconexion, Long> {
 
 	public Optional<Desconexion> findTopByClienteIdAndFechaDesconexionLessThanEqualOrderByFechaDesconexionDesc(Long clienteId,
 			OffsetDateTime fechaEmision);
