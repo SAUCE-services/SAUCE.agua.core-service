@@ -1,16 +1,11 @@
 package sauce.agua.rest.controller.facade;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sauce.agua.rest.model.internal.ConsumoContextDto;
 import sauce.agua.rest.model.internal.DatoConsumo;
 import sauce.agua.rest.service.facade.ConsumoService;
-
-import java.time.OffsetDateTime;
 
 @RestController
 @RequestMapping({"/consumo", "/api/core/consumo"})
@@ -23,10 +18,10 @@ public class ConsumoController {
         this.service = service;
     }
 
-    @GetMapping("/calculate/{clienteId}/{periodoId}/{medidorId}/{fechaEmision}")
-    public ResponseEntity<DatoConsumo> calculateConsumo(@PathVariable Long clienteId, @PathVariable Integer periodoId, @PathVariable String medidorId, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime fechaEmision) {
-        log.debug("Processing controller calculateConsumo clienteId={}, periodoId={}, medidorId={}, fechaEmision={}", clienteId, periodoId, medidorId, fechaEmision);
-        return ResponseEntity.ok(service.calculateConsumo(clienteId, periodoId, medidorId, fechaEmision));
+    @PostMapping("/calculate")
+    public ResponseEntity<DatoConsumo> calculateConsumo(@RequestBody ConsumoContextDto consumoContext) {
+        log.debug("Processing controller calculateConsumo clienteId={}, periodoId={}, medidorId={}, fechaEmision={}", consumoContext.getClienteId(), consumoContext.getPeriodoId(), consumoContext.getMedidorId(), consumoContext.getFechaEmision());
+        return ResponseEntity.ok(service.calculateConsumo(consumoContext.getClienteId(), consumoContext.getPeriodoId(), consumoContext.getMedidorId(), consumoContext.getFechaEmision()));
     }
 
 }
