@@ -3,7 +3,6 @@
  */
 package sauce.agua.rest.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -68,18 +67,29 @@ public class FacturaService {
 	}
 
 	public List<Factura> findAllByDeudaPrint(Long clienteId, Integer periodoIdReferencia) {
-		return repository.findTop6ByClienteIdAndPeriodoIdLessThanAndPagadaAndAnuladaAndCanceladaOrderByFacturaIdDesc(
+		log.debug("Processing core - FacturaService.findAllByDeudaPrint");
+		var facturas = repository.findTop6ByClienteIdAndPeriodoIdLessThanAndPagadaAndAnuladaAndCanceladaOrderByFacturaIdDesc(
 				clienteId, periodoIdReferencia, (byte) 0, (byte) 0, (byte) 0);
+		logFacturas(facturas);
+		return facturas;
 	}
 
 	public Factura findByFactura(Integer prefijoId, Long facturaId) {
-		return repository.findByPrefijoIdAndFacturaId(prefijoId, facturaId)
+		log.debug("Processing core - FacturaService.findByFactura");
+		var factura = repository.findByPrefijoIdAndFacturaId(prefijoId, facturaId)
 				.orElseThrow(() -> new FacturaException(prefijoId, facturaId));
+		logFactura(factura);
+		return factura;
 	}
 
 	private void logCliente(Cliente cliente) {
 		try {
-			log.debug("Cliente: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(cliente));
+			log.debug("Cliente: {}", JsonMapper
+					.builder()
+					.findAndAddModules()
+					.build()
+					.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(cliente));
 		} catch (JsonProcessingException e) {
 			log.debug("Cliente jsonify error: {}", e.getMessage());
 		}
@@ -87,9 +97,27 @@ public class FacturaService {
 
 	private void logFactura(Factura factura) {
 		try {
-			log.debug("Factura: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(factura));
+			log.debug("Factura: {}", JsonMapper
+					.builder()
+					.findAndAddModules()
+					.build()
+					.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(factura));
 		} catch (JsonProcessingException e) {
 			log.debug("Factura jsonify error: {}", e.getMessage());
+		}
+	}
+
+	private void logFacturas(List<Factura> facturas) {
+		try {
+			log.debug("Facturas: {}", JsonMapper
+					.builder()
+					.findAndAddModules()
+					.build()
+					.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(facturas));
+		} catch (JsonProcessingException e) {
+			log.debug("Facturas jsonify error: {}", e.getMessage());
 		}
 	}
 

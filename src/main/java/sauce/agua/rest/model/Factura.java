@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -77,7 +76,7 @@ public class Factura extends Auditable implements Serializable {
 	private Byte cancelada = 0;
 	private Integer planIdCancela;
 	private String pfCodigo;
-	private String pfBarras;
+//	private String pfBarras;
 	private Long cajamovimientoId;
 	private String uid = "";
 

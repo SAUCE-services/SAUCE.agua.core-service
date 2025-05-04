@@ -8,11 +8,14 @@ import java.text.DecimalFormat;
 import java.time.OffsetDateTime;
 import java.time.Period;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sauce.agua.rest.exception.PeriodoException;
+import sauce.agua.rest.exception.RubroException;
 import sauce.agua.rest.model.Detalle;
 import sauce.agua.rest.model.Factura;
 import sauce.agua.rest.model.Novedad;
@@ -33,20 +36,24 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class FacturacionService {
-	@Autowired
-	private RubroRepository rubrorepository;
 
-	@Autowired
-	private PeriodoRepository periodorepository;
+	private final RubroRepository rubrorepository;
+	private final PeriodoRepository periodorepository;
+	private final FacturaRepository facturarepository;
+	private final DetalleRepository detallerepository;
+	private final NovedadRepository novedadrepository;
 
-	@Autowired
-	private FacturaRepository facturarepository;
-
-	@Autowired
-	private DetalleRepository detallerepository;
-
-	@Autowired
-	private NovedadRepository novedadrepository;
+	public FacturacionService(RubroRepository rubrorepository,
+							  PeriodoRepository periodorepository,
+							  FacturaRepository facturarepository,
+							  DetalleRepository detallerepository,
+							  NovedadRepository novedadrepository) {
+		this.rubrorepository = rubrorepository;
+		this.periodorepository = periodorepository;
+		this.facturarepository = facturarepository;
+		this.detallerepository = detallerepository;
+		this.novedadrepository = novedadrepository;
+	}
 
 	@Transactional
 	public void adjust(Integer prefijoId, Long facturaId, Integer decimals) {
@@ -86,7 +93,8 @@ public class FacturacionService {
 		if (ajuste.compareTo(new BigDecimal(0)) == 0)
 			return;
 
-		rubro = rubrorepository.findTopByRubroId(70).get();
+		var rubroId = 70;
+		rubro = rubrorepository.findTopByRubroId(rubroId).orElseThrow(() -> new RubroException(rubroId));
 		// Agregar Novedad, primero la elimina
 		Novedad novedad = novedadrepository
 				.findByClienteIdAndPeriodoIdAndRubroId(factura.getClienteId(), factura.getPeriodoId(), 70)
@@ -137,41 +145,82 @@ public class FacturacionService {
 	}
 
 	public String recalculateCodigoPagoFacil(Factura factura) {
-		log.debug("Factura -> {}", factura.toString());
-		Periodo periodo = periodorepository.findByPeriodoId(factura.getPeriodoId()).get();
-		log.debug("Periodo: {}", periodo.toString());
+		log.debug("Processing FacturacionService.recalculateCodigoPagoFacil");
+		logFactura(factura);
+		Periodo periodo = periodorepository.findByPeriodoId(factura.getPeriodoId()).orElseThrow(() -> new PeriodoException(factura.getPeriodoId()));
+		logPeriodo(periodo);
 
 		String string = "";
 		string += "1972";
+		log.debug("Institucion - {}", string);
 		string += new DecimalFormat("00000000").format(factura.getTotal().multiply(new BigDecimal(100)));
+		log.debug("Total - {}", string);
 		string += String.format("%02d", periodo.getFechaPrimero().getYear() - 2000);
+		log.debug("Fecha - {}", string);
 		string += String.format("%03d", 1 + periodo.getFechaPrimero().getDayOfYear());
+		log.debug("Dia - {}", string);
 		string += transactionIdFactura(factura);
+		log.debug("Transaccion - {}", string);
 		string += "0"; // Moneda
-		string += new DecimalFormat("000000").format(Tool
-				.interes(factura.getTotal(), factura.getTasa(), periodo.getFechaPrimero(), periodo.getFechaSegundo())
-				.multiply(new BigDecimal(100)));
+		log.debug("Moneda - {}", string);
+		var interesCalculado = Tool.interes(factura.getTotal(), factura.getTasa(), periodo.getFechaPrimero(), periodo.getFechaSegundo());
+		log.debug("Interes - {}", interesCalculado);
+		string += new DecimalFormat("000000").format(interesCalculado.multiply(new BigDecimal(100)));
+		log.debug("Interes - {}", string);
 		string += String.format("%02d", Period
 				.between(periodo.getFechaPrimero().toLocalDate(), periodo.getFechaSegundo().toLocalDate()).getDays());
+		log.debug("Dias - {}", string);
 		string += digitoVerificador(string);
+		log.debug("Digito Verificador - {}", string);
 		string += digitoVerificador(string);
+		log.debug("Digito Verificador - {}", string);
 
-		log.debug("Factura: {} -> calculado: {}", factura.toString(), string);
+		log.debug("Codigo PagoFacil calculado: {}", string);
 		return string;
 	}
 
+	private void logPeriodo(Periodo periodo) {
+		try {
+			log.debug("Periodo: {}", JsonMapper
+					.builder()
+					.findAndAddModules()
+					.build()
+					.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(periodo));
+		} catch (JsonProcessingException e) {
+			log.debug("Periodo jsonify error: {}", e.getMessage());
+		}
+	}
+
+	private void logFactura(Factura factura) {
+		try {
+			log.debug("Factura: {}", JsonMapper
+					.builder()
+					.findAndAddModules()
+					.build()
+					.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(factura));
+		} catch (JsonProcessingException e) {
+			log.debug("Factura jsonify error: {}", e.getMessage());
+		}
+	}
+
 	private String transactionIdFactura(Factura factura) {
+		log.debug("Processing FacturacionService.transactionIdFactura");
 		String string = "1";
+		log.debug("Uno - {}", string);
 		string += String.format("%05d", factura.getClienteId());
+		log.debug("Cliente - {}", string);
 		string += String.format("%08d", factura.getFacturaId());
+		log.debug("Factura - {}", string);
 		return string;
 	}
 
 	private Integer digitoVerificador(String string) {
-		Integer acumulador = 0;
+		int acumulador = 0;
 		String constante = "135793579357935793579357935793579357935793579";
 
-		for (Integer ciclo = 0; ciclo < string.length(); ciclo++)
+		for (int ciclo = 0; ciclo < string.length(); ciclo++)
 			acumulador += (string.charAt(ciclo) - 48) * (constante.charAt(ciclo) - 48);
 		acumulador /= 2; // Division entera
 
@@ -181,45 +230,26 @@ public class FacturacionService {
 	public String i2of5(String string) {
 		if ((string.length() & 1) == 1)
 			return "";
-		String code = "";
-		code += (char) 33;
-		for (Integer ciclo = 0; ciclo < string.length(); ciclo += 2) {
-			Integer value = Integer.parseInt(string.substring(ciclo, ciclo + 2));
-			int caracter = 0;
-			switch (value) {
-			case 92:
-				caracter = 196;
-				break;
-			case 93:
-				caracter = 197;
-				break;
-			case 94:
-				caracter = 199;
-				break;
-			case 95:
-				caracter = 201;
-				break;
-			case 96:
-				caracter = 209;
-				break;
-			case 97:
-				caracter = 214;
-				break;
-			case 98:
-				caracter = 220;
-				break;
-			case 99:
-				caracter = 225;
-				break;
-			default:
-				caracter = value + 35;
-				break;
-			}
-			code += (char) caracter;
+		StringBuilder code = new StringBuilder();
+		code.append((char) 33);
+		for (int ciclo = 0; ciclo < string.length(); ciclo += 2) {
+			int value = Integer.parseInt(string.substring(ciclo, ciclo + 2));
+			int caracter = switch (value) {
+                case 92 -> 196;
+                case 93 -> 197;
+                case 94 -> 199;
+                case 95 -> 201;
+                case 96 -> 209;
+                case 97 -> 214;
+                case 98 -> 220;
+                case 99 -> 225;
+                default -> value + 35;
+            };
+            code.append((char) caracter);
 		}
-		code += (char) 34;
+		code.append((char) 34);
 		log.debug("I2of5 -> {}", code);
 
-		return code;
+		return code.toString();
 	}
 }

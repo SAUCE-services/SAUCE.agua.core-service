@@ -203,9 +203,9 @@ def generate_wiki_content(wiki_dir: Path, data_dir: Path):
     try:
         # Home.md
         with open(wiki_dir / 'Home.md', 'w', encoding='utf-8') as f:
-            f.write("""# SAUCE Agua Eureka Service Wiki
+            f.write("""# SAUCE Agua Core Service Wiki
 
-Bienvenido a la Wiki del servicio Eureka de SAUCE Agua.
+Bienvenido a la Wiki del servicio Core de SAUCE Agua.
 
 ## Navegación Rápida
 

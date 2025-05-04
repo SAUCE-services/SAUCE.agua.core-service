@@ -3,6 +3,8 @@
  */
 package sauce.agua.rest.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
@@ -15,7 +17,9 @@ import java.util.Date;
  * @author daniel
  *
  */
+@Slf4j
 public class Tool {
+
 	public static BigDecimal rounding(BigDecimal number, Integer decimals) {
 		if (decimals < 0) {
 			Long factor = 1L;
@@ -38,11 +42,14 @@ public class Tool {
 
 	public static BigDecimal interes(BigDecimal total, BigDecimal tasa, OffsetDateTime referencia,
 			OffsetDateTime fecha_calculo) {
-		Double tasa_diaria = Math.pow(1.0 + tasa.doubleValue(), 1.0 / 30.0) - 1;
+		log.debug("Processing Tool.interes");
+		double tasa_diaria = Math.pow(1.0 + tasa.doubleValue(), 1.0 / 30.0) - 1;
 		Period period = Period.between(referencia.toLocalDate(), fecha_calculo.toLocalDate());
-		Double factor = Math.pow(1.0 + tasa_diaria, period.getDays()) - 1;
-		Double interes_double = total.doubleValue() * factor;
-		return new BigDecimal(interes_double);
+		double factor = Math.pow(1.0 + tasa_diaria, period.getDays()) - 1;
+		double interes_double = total.doubleValue() * factor;
+		var interesCalculado = new BigDecimal(interes_double);
+		log.debug("Interes calculado: {}", interesCalculado);
+		return interesCalculado;
 	}
 
 }
