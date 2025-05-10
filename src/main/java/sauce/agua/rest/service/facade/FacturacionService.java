@@ -165,10 +165,19 @@ public class FacturacionService {
 		log.debug("Moneda - {}", string);
 		var interesCalculado = Tool.interes(factura.getTotal(), factura.getTasa(), periodo.getFechaPrimero(), periodo.getFechaSegundo());
 		log.debug("Interes - {}", interesCalculado);
+		var eliminarSegundoVencimiento = false;
+		if (interesCalculado.compareTo(new BigDecimal("9999.99")) > 0) {
+			interesCalculado = BigDecimal.ZERO;
+			eliminarSegundoVencimiento = true;
+			log.debug("Segundo vencimiento eliminado");
+		}
 		string += new DecimalFormat("000000").format(interesCalculado.multiply(new BigDecimal(100)));
 		log.debug("Interes - {}", string);
-		string += String.format("%02d", Period
-				.between(periodo.getFechaPrimero().toLocalDate(), periodo.getFechaSegundo().toLocalDate()).getDays());
+		var days = Period.between(periodo.getFechaPrimero().toLocalDate(), periodo.getFechaSegundo().toLocalDate()).getDays();
+		if (eliminarSegundoVencimiento) {
+			days = 0;
+		}
+		string += String.format("%02d", days);
 		log.debug("Dias - {}", string);
 		string += digitoVerificador(string);
 		log.debug("Digito Verificador - {}", string);
