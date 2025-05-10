@@ -10,9 +10,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 ### Added
 - Implementación de GitHub Pages y documentación automatizada (2025-01-27)
 - Mejoras en la generación de PDFs con estilos de encabezado y pie de página (2025-01-18)
+- Manejo de intereses y vencimientos en facturación
+  - Eliminación automática de segundo vencimiento cuando el interés supera el límite
+  - Validación de períodos de facturación
 
 ### Changed
 - Actualización de Spring Boot y optimización de la configuración JPA (2025-01-24)
+- Actualización de dependencias:
+  - SpringDoc OpenAPI a 2.8.8
+  - Spring Boot a 3.4.5
+  - Spring Cloud a 2024.0.1
 - Actualización de dependencias y ajustes de márgenes en PDF (2025-01-16)
 - Migración de endpoints REST y mejoras en la calidad del código (2025-01-23)
 - Reestructuración de endpoints y actualización de dependencias (2025-01-09)

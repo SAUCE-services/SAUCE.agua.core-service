@@ -18,18 +18,20 @@ Servicio core para la gestión de servicios de agua, parte del ecosistema SAUCE.
 - MySQL
 - Maven 3.8.8
 - OpenPDF 2.0.3
-- SpringDoc OpenAPI 2.8.6
+- SpringDoc OpenAPI 2.8.8
 - Caffeine Cache
 
 ## Características
 
-- Gestión de facturación
-- Generación de PDFs
+- Gestión de facturación con manejo de intereses y vencimientos
+- Generación de PDFs con estilos personalizados
 - Integración con servicios externos
 - API REST con documentación OpenAPI
 - Manejo de excepciones estandarizado
 - Caché con Caffeine
-- Logging con Log4j2
+- Logging detallado con Log4j2
+- Validación de códigos de barras y pagos
+- Gestión de períodos y rubros
 
 ## Requisitos
 
