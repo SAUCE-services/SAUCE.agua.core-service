@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.server.ResponseStatusException;
+import sauce.agua.rest.exception.ClienteException;
 import sauce.agua.rest.model.Cliente;
 import sauce.agua.rest.model.ICliente;
 import sauce.agua.rest.model.view.ActivoConMedidor;
@@ -139,22 +141,38 @@ public class ClienteController {
 	
 	@GetMapping("/{uniqueId}")
 	public ResponseEntity<Cliente> findByUniqueId(@PathVariable Long uniqueId) {
-		return new ResponseEntity<>(service.findByUniqueId(uniqueId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(service.findByUniqueId(uniqueId), HttpStatus.OK);
+		} catch (ClienteException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
 	}
 
 	@GetMapping("/lastbyclienteId/{clienteId}")
 	public ResponseEntity<Cliente> findLastByClienteId(@PathVariable Long clienteId) {
-		return new ResponseEntity<>(service.findLastByClienteId(clienteId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(service.findLastByClienteId(clienteId), HttpStatus.OK);
+		} catch (ClienteException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@GetMapping("/lastcliente")
 	public ResponseEntity<Cliente> findLastCliente() {
-		return new ResponseEntity<>(service.findLastCliente(), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(service.findLastCliente(), HttpStatus.OK);
+		} catch (ClienteException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 	
 	@GetMapping("/nextbyclienteId/{clienteId}")
 	public ResponseEntity<ClienteRecorrido> findNextCliente(@PathVariable Long clienteId) {
-		return new ResponseEntity<>(service.findNextCliente(clienteId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(service.findNextCliente(clienteId), HttpStatus.OK);
+		} catch (ClienteException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 	
 	@PostMapping("/")
