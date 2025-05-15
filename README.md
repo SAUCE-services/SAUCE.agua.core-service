@@ -23,15 +23,11 @@ Servicio core para la gestión de servicios de agua, parte del ecosistema SAUCE.
 
 ## Características
 
-- Gestión de facturación con manejo de intereses y vencimientos
-- Generación de PDFs con estilos personalizados
-- Integración con servicios externos
+- Gestión de clientes y facturación
+- Validación de montos máximos en facturación
 - API REST con documentación OpenAPI
 - Manejo de excepciones estandarizado
-- Caché con Caffeine
-- Logging detallado con Log4j2
-- Validación de códigos de barras y pagos
-- Gestión de períodos y rubros
+- Logging con Log4j2
 
 ## Requisitos
 

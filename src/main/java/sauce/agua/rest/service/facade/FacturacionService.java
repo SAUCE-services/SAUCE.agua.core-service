@@ -154,6 +154,9 @@ public class FacturacionService {
 		string += "1972";
 		log.debug("Institucion - {}", string);
 		string += new DecimalFormat("00000000").format(factura.getTotal().multiply(new BigDecimal(100)));
+		if (factura.getTotal().compareTo(new BigDecimal("999999.99")) > 0) {
+			return "00";
+		}
 		log.debug("Total - {}", string);
 		string += String.format("%02d", periodo.getFechaPrimero().getYear() - 2000);
 		log.debug("Fecha - {}", string);
