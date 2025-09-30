@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import sauce.agua.rest.util.Jsonifier;
 
 /**
  * @author daniel
@@ -57,5 +58,8 @@ public class Periodo extends Auditable implements Serializable {
 	private String leyenda = "";
 	private BigDecimal liquidado = BigDecimal.ZERO;
 	private String uid = "";
-	
+
+    public String jsonify() {
+        return Jsonifier.builder(this).build();
+    }
 }

@@ -5,15 +5,23 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.0] - 2025-09-30
 
 ### Added
+- Nueva entidad ClienteVolumen para gestión de volúmenes de clientes
+- Servicio ClienteVolumenService y repositorio ClienteVolumenRepository
+- Excepción ClienteVolumenException para manejo de errores en volúmenes
+- Utilidad Jsonifier para serialización JSON de objetos
+- Método jsonify() en modelos Factura y Periodo para debugging y logging
 - Implementación de manejo de excepciones en ClienteController
   - Manejo de ClienteException con ResponseStatusException
   - Mejora en el manejo de errores HTTP
 
 ### Changed
-- Actualización de SpringDoc OpenAPI a 2.8.8
+- Actualización de dependencias: Spring Boot 3.5.3 -> 3.5.6, openpdf 2.2.3 -> 3.0.0, springdoc 2.8.9 -> 2.8.10
+- Refactorización de constructores con @RequiredArgsConstructor en controladores y servicios (DgeFileController, MedidorService, ConsumoService, DgeFileService)
+- Mejoras en DgeFileService para incluir cálculo de consumo en archivos DGE generados
+- Configuración de health check para mail en bootstrap.yml
 - Mejora en la validación de montos en facturación
   - Implementación de límite máximo de 999999.99
   - Retorno de código "00" para montos excedidos

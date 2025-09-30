@@ -52,6 +52,11 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
+management:
+  health:
+    mail:
+      enabled: false
+
 logging:
   level:
     sauce.agua.rest: ${app.logging}

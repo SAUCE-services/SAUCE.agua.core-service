@@ -75,8 +75,8 @@ jobs:
           </head>
           <body>
               <div class="header">
-                  <h1>📋 Eterea Gateway Service - Documentación del Proyecto</h1>
-                  <p>Punto de Entrada Unificado para el Ecosistema de Microservicios Eterea</p>
+                  <h1>📋 SAUCE.agua.core-service - Documentación del Proyecto</h1>
+                  <p>Servicio Core para Gestión de Servicios de Agua en el Ecosistema SAUCE</p>
                   <p>Última actualización: <span id="update-date"></span></p>
               </div>
               <div id="stats" class="stats"></div>
@@ -124,23 +124,18 @@ jobs:
                               subgraph "Internet"
                                   Client[Cliente Externo]
                               end
-                              
-                              subgraph "Eterea Ecosystem"
-                                  Gateway(Eterea API Gateway)
-                                  Auth[Servicio de Autenticación]
-                                  Users[Servicio de Usuarios]
-                                  Products[Servicio de Productos]
-                                  Discovery[Servicio de Discovery]
+
+                              subgraph "SAUCE Ecosystem"
+                                  AguaService[SAUCE Agua Core Service]
+                                  DB[(Base de Datos MySQL)]
+                                  Consul[Consul Discovery]
+                                  Mail[Servicio de Correo]
                               end
 
-                              Client -- HTTPS --> Gateway
-                              Gateway -- Valida Token --> Auth
-                              Gateway -- Enruta Petición --> Users
-                              Gateway -- Enruta Petición --> Products
-                              Gateway -- Descubre Servicios --> Discovery
-                              Auth -- Se registra en --> Discovery
-                              Users -- Se registra en --> Discovery
-                              Products -- Se registra en --> Discovery
+                              Client -- HTTPS --> AguaService
+                              AguaService -- CRUD --> DB
+                              AguaService -- Registra Servicios --> Consul
+                              AguaService -- Envía Notificaciones --> Mail
                       </div>
                   `;
                   document.getElementById('architecture').innerHTML = architectureHTML;
@@ -226,7 +221,7 @@ jobs:
           
           # Create a simple Home.md as a portal
           cat > Home.md << EOF
-          # 📋 Wiki del Proyecto Eterea Gateway Service
+          # 📋 Wiki del Proyecto SAUCE.agua.core-service
 
           Esta wiki sirve como un portal de acceso rápido a los recursos más importantes del proyecto.
 

@@ -1,0 +1,11 @@
+stateDiagram-v2
+    [*] --> Inicializando
+    Inicializando --> RegistrandoEnConsul: Conexión exitosa
+    Inicializando --> Error: Fallo de conexión
+    RegistrandoEnConsul --> Listo: Registro exitoso
+    RegistrandoEnConsul --> Error: Fallo de registro
+    Listo --> ProcesandoPeticiones: Petición entrante
+    ProcesandoPeticiones --> Listo: Respuesta enviada
+    ProcesandoPeticiones --> Error: Excepción
+    Error --> [*]: Reinicio manual
+    Error --> Recuperando: Auto-recuperación
