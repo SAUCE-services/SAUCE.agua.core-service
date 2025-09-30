@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import sauce.agua.rest.util.Jsonifier;
 
 /**
  * @author daniel
@@ -84,4 +85,7 @@ public class Factura extends Auditable implements Serializable {
 	@JoinColumn(name = "periodoId", insertable = false, updatable = false)
 	private Periodo periodo;
 
+    public String jsonify() {
+        return Jsonifier.builder(this).build();
+    }
 }

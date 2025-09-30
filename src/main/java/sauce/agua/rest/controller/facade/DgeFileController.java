@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -27,13 +28,10 @@ import sauce.agua.rest.service.facade.DgeFileService;
  */
 @RestController
 @RequestMapping({"/dgefile", "/api/core/dgefile"})
+@RequiredArgsConstructor
 public class DgeFileController {
 
 	private final DgeFileService service;
-
-	public DgeFileController(DgeFileService service) {
-		this.service = service;
-	}
 
 	@GetMapping("/generate/{periodoId}")
 	public ResponseEntity<Resource> generate(@PathVariable Integer periodoId)

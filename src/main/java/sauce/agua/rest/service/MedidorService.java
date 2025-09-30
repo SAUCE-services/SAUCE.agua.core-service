@@ -5,6 +5,7 @@ package sauce.agua.rest.service;
 
 import java.time.OffsetDateTime;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,10 @@ import sauce.agua.rest.repository.MedidorRepository;
  *
  */
 @Service
+@RequiredArgsConstructor
 public class MedidorService {
 
 	private final MedidorRepository repository;
-
-	public MedidorService(MedidorRepository repository) {
-		this.repository = repository;
-	}
 
 	public Medidor findByClienteId(Long clienteId, Boolean colocado) {
 		Medidor medidor = repository

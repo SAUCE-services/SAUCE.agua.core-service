@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant Client as Cliente
+    participant Controller as Controller
+    participant Service as Service
+    participant Repository as Repository
+    participant DB as Base de Datos
+
+    Client->>Controller: HTTP Request (GET/POST/PUT/DELETE)
+    Controller->>Service: Llamada a método de negocio
+    Service->>Repository: Consulta/Actualización de datos
+    Repository->>DB: SQL Query
+    DB-->>Repository: Resultado
+    Repository-->>Service: Entidad/DTO
+    Service-->>Controller: Respuesta procesada
+    Controller-->>Client: HTTP Response (JSON)

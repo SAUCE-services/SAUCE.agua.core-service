@@ -8,6 +8,7 @@ import java.time.ZoneOffset;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ import sauce.agua.rest.service.PeriodoService;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ConsumoService {
 
 	private final LecturaService lecturaService;
@@ -39,18 +41,6 @@ public class ConsumoService {
 	private final PeriodoService periodoService;
 	private final MedicionService medicionService;
 	private final DesconexionService desconexionService;
-
-	public ConsumoService(LecturaService lecturaService,
-						  MedidorService medidorService,
-						  PeriodoService periodoService,
-						  MedicionService medicionService,
-						  DesconexionService desconexionService) {
-		this.lecturaService = lecturaService;
-		this.medidorService = medidorService;
-		this.periodoService = periodoService;
-		this.medicionService = medicionService;
-		this.desconexionService = desconexionService;
-	}
 
 	public DatoConsumo calculateConsumo(Long clienteId, Integer periodoId, String medidorId,
 			OffsetDateTime fechaEmision) {
