@@ -36,7 +36,7 @@ public class DgeFileController {
 	@GetMapping("/generate/{periodoId}")
 	public ResponseEntity<Resource> generate(@PathVariable Integer periodoId)
 			throws IOException {
-		List<Long> clienteIds = List.of(167L, 168L, 218L, 255L);
+		List<Long> clienteIds = List.of(167L, 168L, 218L, 255L, 2218L, 2219L);
 		String filename = service.generate(periodoId, clienteIds);
 		File file = new File(filename);
 		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
