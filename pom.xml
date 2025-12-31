@@ -5,18 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
+        <version>3.5.8</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
     <groupId>ar.com</groupId>
     <artifactId>sauce.agua.rest</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <name>SAUCE.agua.core-service</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <java.version>24</java.version>
+        <java.version>25</java.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <sonar.organization>sauce-services</sonar.organization>
         <sonar.projectKey>SAUCE-services_SAUCE.agua.core-service</sonar.projectKey>
