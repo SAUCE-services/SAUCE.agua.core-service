@@ -42,7 +42,6 @@ public class DgeFileController {
 				255L,
 				2218L,
 				2219L,
-				2241L,
 				2240L
 		);
 		String filename = service.generate(periodoId, clienteIds);
