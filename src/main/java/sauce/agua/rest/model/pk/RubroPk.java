@@ -4,7 +4,7 @@
 package sauce.agua.rest.model.pk;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 import lombok.Data;
 
@@ -20,6 +20,6 @@ public class RubroPk implements Serializable {
 	private static final long serialVersionUID = -7634033454112408188L;
 
 	private Integer rubroId;
-	private LocalDate fecha;
+	private OffsetDateTime fecha;
 
 }

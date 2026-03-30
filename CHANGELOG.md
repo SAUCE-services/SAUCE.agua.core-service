@@ -5,6 +5,21 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-03-30
+
+### Added
+- feat: Agregado cliente ID 2241L a la lista de generación de archivos DGE
+
+### Changed
+- **BREAKING**: Upgrade de Spring Boot: 3.5.8 → 4.0.4
+- **BREAKING**: Upgrade de SpringDoc OpenAPI: 2.8.10 → 3.0.2
+- Upgrade de Spring Cloud: 2025.0.0 → 2025.1.0
+- Upgrade de OpenPDF: 3.0.0 → 3.0.3
+- Upgrade de commons-lang3: 3.18.0 → 3.20.0
+
+### Fixed
+- refactor: Cambio de tipo LocalDate a OffsetDateTime en RubroPk para mejor soporte de zonas horarias
+
 ## [0.1.1] - 2025-12-31
 
 ### Added
