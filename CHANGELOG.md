@@ -5,6 +5,11 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-03-31
+
+### Added
+- feat: Agregados constructores AllArgsConstructor y NoArgsConstructor en ConsumoContextDto para mejora de serialización JSON
+
 ## [1.0.0] - 2026-03-30
 
 ### Added
