@@ -11,7 +11,7 @@
     </parent>
     <groupId>ar.com</groupId>
     <artifactId>sauce.agua.rest</artifactId>
-    <version>0.1.1</version>
+    <version>1.0.1</version>
     <name>SAUCE.agua.core-service</name>
     <description>Demo project for Spring Boot</description>
 
