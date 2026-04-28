@@ -2,7 +2,7 @@
 
 [![SAUCE.agua.rest CI](https://github.com/SAUCE-services/SAUCE.agua.core-service/actions/workflows/maven.yml/badge.svg)](https://github.com/SAUCE-services/SAUCE.agua.core-service/actions/workflows/maven.yml)
 [![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://www.oracle.com/java/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.6-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.1.0-blue.svg)](https://spring.io/projects/spring-cloud)
 [![Maven](https://img.shields.io/badge/Maven-3.8.8-red.svg)](https://maven.apache.org/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
@@ -12,7 +12,7 @@ Servicio core para la gestión de servicios de agua, parte del ecosistema SAUCE.
 ## Tecnologías Principales
 
 - Java 25
-- Spring Boot 4.0.4
+- Spring Boot 4.0.6
 - Spring Cloud 2025.1.0
 - Spring Data JPA
 - MySQL

@@ -22,10 +22,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 24
+      - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
-          java-version: '24'
+          java-version: '25'
           distribution: 'temurin'
           cache: maven
 
@@ -116,28 +116,26 @@ jobs:
                   `;
                   document.getElementById('stats').innerHTML = statsHTML;
 
-                  // --- Architecture Diagram ---
-                  const architectureHTML = `
-                      <h2>🏛️ Arquitectura del Servicio</h2>
-                      <div class="mermaid">
-                          graph TD
-                              subgraph "Internet"
-                                  Client[Cliente Externo]
-                              end
+                   // --- Architecture Diagram ---
+                   const architectureHTML = `
+                       <h2>🏛️ Arquitectura del Servicio</h2>
+                       <div class="mermaid">
+                           graph TD
+                               subgraph "Internet"
+                                   Client[Cliente Externo]
+                               end
 
-                              subgraph "SAUCE Ecosystem"
-                                  AguaService[SAUCE Agua Core Service]
-                                  DB[(Base de Datos MySQL)]
-                                  Consul[Consul Discovery]
-                                  Mail[Servicio de Correo]
-                              end
+                               subgraph "SAUCE Ecosystem"
+                                   AguaService[SAUCE Agua Core Service]
+                                   DB[(Base de Datos MySQL)]
+                                   Consul[Consul Discovery]
+                               end
 
-                              Client -- HTTPS --> AguaService
-                              AguaService -- CRUD --> DB
-                              AguaService -- Registra Servicios --> Consul
-                              AguaService -- Envía Notificaciones --> Mail
-                      </div>
-                  `;
+                               Client -- HTTPS --> AguaService
+                               AguaService -- CRUD --> DB
+                               AguaService -- Registra Servicios --> Consul
+                       </div>
+                   `;
                   document.getElementById('architecture').innerHTML = architectureHTML;
 
                   // --- Sequence Diagram ---
