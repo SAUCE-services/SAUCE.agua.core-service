@@ -5,6 +5,19 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-07-06
+
+### Changed
+- Upgrade Spring Boot: 4.0.6 → 4.1.0 (pom.xml parent)
+- Upgrade Spring Cloud: 2025.1.0 → 2025.1.2
+- Upgrade OpenPDF: 3.0.3 → 3.0.5
+- Upgrade SpringDoc OpenAPI: 3.0.2 → 3.0.3
+
+### Removed
+- Log4j2 logging dependency; reverted to Spring Boot default logging (Logback)
+  - Removed spring-boot-starter-logging exclusion from spring-boot-starter
+  - Removed spring-boot-starter-log4j2 dependency
+
 ## [1.0.2] - 2026-04-28
 
 ### Changed
