@@ -20,6 +20,6 @@ import sauce.agua.rest.model.view.pk.PeriodoPagoPk;
 @Repository
 public interface IPeriodoPagoRepository extends JpaRepository<PeriodoPago, PeriodoPagoPk> {
 
-	public List<PeriodoPago> findAllByFechapagoBetween(OffsetDateTime desde, OffsetDateTime hasta, Sort sort);
+	List<PeriodoPago> findAllByFechapagoBetween(OffsetDateTime desde, OffsetDateTime hasta, Sort sort);
 
 }

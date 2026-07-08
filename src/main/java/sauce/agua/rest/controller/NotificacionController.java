@@ -9,7 +9,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,23 +38,23 @@ public class NotificacionController {
 	@GetMapping("/byfecha/{fecha}")
 	public ResponseEntity<List<Notificacion>> findAllByFecha(
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
-		return new ResponseEntity<>(service.findAllByFecha(fecha), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllByFecha(fecha));
 	}
 
 	@GetMapping("/unique/{clienteId}/{fecha}")
 	public ResponseEntity<Notificacion> findByUnique(@PathVariable Long clienteId,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
-		return new ResponseEntity<>(service.findByUnique(clienteId, fecha), HttpStatus.OK);
+		return ResponseEntity.ok(service.findByUnique(clienteId, fecha));
 	}
 
 	@PostMapping("/")
 	public ResponseEntity<Notificacion> add(@RequestBody Notificacion notificacion) {
-		return new ResponseEntity<>(service.add(notificacion), HttpStatus.OK);
+		return ResponseEntity.ok(service.add(notificacion));
 	}
 
 	@PutMapping("/{clienteId}/{fecha}")
 	public ResponseEntity<Notificacion> update(@RequestBody Notificacion notificacion, @PathVariable Long clienteId,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime fecha) {
-		return new ResponseEntity<>(service.update(notificacion, clienteId, fecha), HttpStatus.OK);
+		return ResponseEntity.ok(service.update(notificacion, clienteId, fecha));
 	}
 }

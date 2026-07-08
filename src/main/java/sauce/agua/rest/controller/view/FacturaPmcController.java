@@ -9,7 +9,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +36,6 @@ public class FacturaPmcController {
 	public ResponseEntity<List<FacturaPmc>> findAllByPeriodo(
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime desde,
 			@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) OffsetDateTime hasta) {
-		return new ResponseEntity<>(service.findAllByPeriodo(desde, hasta), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllByPeriodo(desde, hasta));
 	}
 }

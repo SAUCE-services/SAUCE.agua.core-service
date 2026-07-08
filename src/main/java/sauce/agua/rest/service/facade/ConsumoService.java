@@ -15,17 +15,19 @@ import org.springframework.stereotype.Service;
 import sauce.agua.rest.exception.DesconexionException;
 import sauce.agua.rest.exception.LecturaException;
 import sauce.agua.rest.exception.MedicionException;
+import sauce.agua.rest.hexagonal.periodo.domain.model.Periodo;
 import sauce.agua.rest.model.Desconexion;
 import sauce.agua.rest.model.Lectura;
 import sauce.agua.rest.model.Medicion;
-import sauce.agua.rest.model.Medidor;
-import sauce.agua.rest.model.Periodo;
+import sauce.agua.rest.hexagonal.medidor.domain.model.Medidor;
+import sauce.agua.rest.hexagonal.periodo.infrastructure.persistence.entity.PeriodoEntity;
 import sauce.agua.rest.model.internal.DatoConsumo;
 import sauce.agua.rest.service.DesconexionService;
 import sauce.agua.rest.service.LecturaService;
 import sauce.agua.rest.service.MedicionService;
-import sauce.agua.rest.service.MedidorService;
-import sauce.agua.rest.service.PeriodoService;
+import sauce.agua.rest.hexagonal.medidor.application.service.MedidorService;
+import sauce.agua.rest.hexagonal.periodo.application.service.PeriodoService;
+import sauce.agua.rest.util.Jsonifier;
 
 /**
  * @author daniel
@@ -47,13 +49,13 @@ public class ConsumoService {
 		log.debug("Calculando consumo para cliente {} periodo {} medidor {} fechaEmision {}", clienteId, periodoId, medidorId, fechaEmision);
 		DatoConsumo datoConsumo = new DatoConsumo(OffsetDateTime.of(1980, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
 				OffsetDateTime.of(1980, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC), 0L, 0L, 0L);
-		logConsumo(datoConsumo);
+		log.debug("DatoConsumo: {}", Jsonifier.builder(datoConsumo).build());
 
 		boolean desconectado = false;
 
 		Periodo periodo = periodoService.findByPeriodoId(periodoId);
 		log.debug("Calculando consumo (1)");
-		logPeriodo(periodo);
+		log.debug("Periodo: {}", Jsonifier.builder(periodo).build());
 
 		Desconexion desconexion;
 
@@ -81,7 +83,7 @@ public class ConsumoService {
 
 		Medidor medidor = medidorService.findByClienteId(clienteId, true);
 		log.debug("Calculando consumo (2)");
-		logMedidor(medidor);
+		log.debug("Medidor: {}", Jsonifier.builder(medidor).build());
 
 		Lectura lectura;
 
@@ -91,12 +93,12 @@ public class ConsumoService {
 			lectura = new Lectura();
 		}
 		log.debug("Calculando consumo (3)");
-		logLectura(lectura);
+		log.debug("Lectura: {}", Jsonifier.builder(lectura).build());
 
 		datoConsumo.setFechaActual(lectura.getFechaLectura());
 		datoConsumo.setEstadoActual(medidor.getEstadoInicio());
 		log.debug("Estado actual");
-		logConsumo(datoConsumo);
+		log.debug("Dato consumo: {}", Jsonifier.builder(datoConsumo).build());
 
 		if (lectura.getUniqueId() != null) {
 			if (!medidor.getFechaColocacion().isAfter(periodo.getFechaInicio())) {
@@ -104,13 +106,13 @@ public class ConsumoService {
 				var medicion = createOrUpdateMedicion(clienteId, lectura.getPeriodoId(), medidorId,
 					lectura.getFechaLectura(), lectura.getEstado());
 				log.debug("Calculando consumo (4)");
-				logMedicion(medicion);
+				log.debug("Medicion: {}", Jsonifier.builder(medicion).build());
 			}
 		} else {
 			var medicion = createOrUpdateMedicion(clienteId, periodoId, medidorId,
 				OffsetDateTime.now().minusDays(365), 0L);
 			log.debug("Calculando consumo (5)");
-			logMedicion(medicion);
+			log.debug("Medicion: {}", Jsonifier.builder(medicion).build());
 		}
 
         try {
@@ -118,12 +120,12 @@ public class ConsumoService {
 		} catch (LecturaException e) {
 			lectura = new Lectura();
 		}
-		logLectura(lectura);
+		log.debug("Lectura actual: {}", Jsonifier.builder(lectura).build());
 
 		datoConsumo.setFechaAnterior(lectura.getFechaLectura());
 		datoConsumo.setEstadoAnterior(medidor.getEstadoInicio());
 		log.debug("Estado anterior");
-		logConsumo(datoConsumo);
+		log.debug("Dato consumo: {}", Jsonifier.builder(datoConsumo).build());
 
 		if (lectura.getUniqueId() != null) {
 			if (!medidor.getFechaColocacion().isAfter(periodo.getFechaFin())) {
@@ -131,63 +133,23 @@ public class ConsumoService {
 				var medicion = createOrUpdateMedicion(clienteId, lectura.getPeriodoId(), medidorId,
 					lectura.getFechaLectura(), lectura.getEstado());
 				log.debug("Calculando consumo (6)");
-				logMedicion(medicion);
+				log.debug("Medicion: {}", Jsonifier.builder(medicion).build());
 			}
 		} else {
 			var medicion = createOrUpdateMedicion(clienteId, periodoId - 1, medidorId,
 				OffsetDateTime.now().minusDays(365), 0L);
 			log.debug("Calculando consumo (7)");
-			logMedicion(medicion);
+			log.debug("Medicion: {}", Jsonifier.builder(medicion).build());
 		}
 
 		datoConsumo.setConsumo(datoConsumo.getEstadoActual() - datoConsumo.getEstadoAnterior());
 		log.debug("Consumo calculado");
-		logConsumo(datoConsumo);
+		log.debug("Dato consumo: {}", Jsonifier.builder(datoConsumo).build());
 
 		return datoConsumo;
 	}
 
-	private void logConsumo(DatoConsumo datoConsumo) {
-		try {
-			log.debug("DatoConsumo: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(datoConsumo));
-		} catch (JsonProcessingException e) {
-			log.debug("DatoConsumo jsonify error: {}", e.getMessage());
-		}
-	}
-
-	private void logMedicion(Medicion medicion) {
-		try {
-			log.debug("Medicion: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(medicion));
-		} catch (JsonProcessingException e) {
-			log.debug("Medicion jsonify error: {}", e.getMessage());
-		}
-	}
-
-	private void logLectura(Lectura lectura) {
-		try {
-			log.debug("Lectura: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(lectura));
-		} catch (JsonProcessingException e) {
-			log.debug("Lectura jsonify error: {}", e.getMessage());
-		}
-	}
-
-	private void logPeriodo(Periodo periodo) {
-		try {
-			log.debug("Periodo: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(periodo));
-		} catch (JsonProcessingException e) {
-			log.debug("Periodo jsonify error: {}", e.getMessage());
-		}
-	}
-
-	private void logMedidor(Medidor medidor) {
-		try {
-			log.debug("Medidor: {}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(medidor));
-		} catch (JsonProcessingException e) {
-			log.debug("Medidor jsonify error: {}", e.getMessage());
-		}
-	}
-
-	private Medicion createOrUpdateMedicion(Long clienteId, Integer periodoId, String medidorId, 
+	private Medicion createOrUpdateMedicion(Long clienteId, Integer periodoId, String medidorId,
 			OffsetDateTime fechaLectura, Long estado) {
 		Medicion medicion = null;
 		try {
@@ -207,7 +169,7 @@ public class ConsumoService {
 		} else {
 			medicion = medicionService.update(medicion, medicion.getUniqueId());
 		}
-		logMedicion(medicion);
+		log.debug("Medicion calculado: {}", Jsonifier.builder(medicion).build());
 		return medicion;
 	}
 

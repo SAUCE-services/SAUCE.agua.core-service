@@ -42,11 +42,11 @@ public class FacturacionController {
 	@PostMapping("/codigopf")
 	public ResponseEntity<String> codigopf(@RequestBody Factura factura) {
 		log.debug("Factura -> {}", factura);
-		return new ResponseEntity<>(service.recalculateCodigoPagoFacil(factura), HttpStatus.OK);
+		return ResponseEntity.ok(service.recalculateCodigoPagoFacil(factura));
 	}
 	
 	@GetMapping("/i2of5/{codigo}")
 	public ResponseEntity<String> i2of5(@PathVariable String codigo) {
-		return new ResponseEntity<>(service.i2of5(codigo), HttpStatus.OK);
+		return ResponseEntity.ok(service.i2of5(codigo));
 	}
 }

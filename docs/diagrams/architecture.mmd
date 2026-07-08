@@ -1,0 +1,31 @@
+graph TD
+    subgraph "Capa de Presentación"
+        Controller[Controladores REST]
+        DTO[DTOs Request/Response]
+    end
+
+    subgraph "Capa de Aplicación (Hexagonal)"
+        UseCase[Use Cases / In Ports]
+        Service[Domain Services]
+    end
+
+    subgraph "Capa de Persistencia"
+        Repository[Repository Out Ports]
+        JpaAdapter[JPA Repository Adapters]
+        Entity[Entities JPA]
+        DB[(Base de Datos MySQL)]
+    end
+
+    subgraph "Infraestructura Externa"
+        Consul[Consul Discovery]
+        Afip[AFIP WS]
+    end
+
+    Controller --> UseCase
+    UseCase --> Service
+    Service --> Repository
+    Repository --> JpaAdapter
+    JpaAdapter --> Entity
+    Entity --> DB
+    Service --> Consul
+    Service --> Afip

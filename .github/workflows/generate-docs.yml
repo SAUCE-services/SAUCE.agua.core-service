@@ -117,26 +117,13 @@ jobs:
                   document.getElementById('stats').innerHTML = statsHTML;
 
                    // --- Architecture Diagram ---
-                   const architectureHTML = `
-                       <h2>🏛️ Arquitectura del Servicio</h2>
-                       <div class="mermaid">
-                           graph TD
-                               subgraph "Internet"
-                                   Client[Cliente Externo]
-                               end
-
-                               subgraph "SAUCE Ecosystem"
-                                   AguaService[SAUCE Agua Core Service]
-                                   DB[(Base de Datos MySQL)]
-                                   Consul[Consul Discovery]
-                               end
-
-                               Client -- HTTPS --> AguaService
-                               AguaService -- CRUD --> DB
-                               AguaService -- Registra Servicios --> Consul
-                       </div>
-                   `;
-                  document.getElementById('architecture').innerHTML = architectureHTML;
+                   fetch('diagrams/architecture.mmd')
+                       .then(response => response.text())
+                       .then(data => {
+                           const archContainer = document.getElementById('architecture');
+                           archContainer.innerHTML = '<h2>🏛️ Arquitectura del Servicio</h2><div class="mermaid">' + data + '</div>';
+                           mermaid.init(undefined, archContainer.querySelector('.mermaid'));
+                       });
 
                   // --- Sequence Diagram ---
                   fetch('diagrams/request-flow.mmd')
