@@ -5,7 +5,6 @@ package sauce.agua.rest.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,44 +32,41 @@ public class FacturaController {
 
 	@GetMapping("/periodo/{periodoId}")
 	public ResponseEntity<List<Factura>> findAllByPeriodoId(@PathVariable Integer periodoId) {
-		return new ResponseEntity<>(service.findAllByPeriodoId(periodoId), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllByPeriodoId(periodoId));
 	}
 
 	@GetMapping("/zona/{periodoId}/{zona}")
 	public ResponseEntity<List<Factura>> findAllByPeriodoIdAndZona(@PathVariable Integer periodoId,
 			@PathVariable Integer zona) {
-		return new ResponseEntity<>(service.findAllByPeriodoIdAndZona(periodoId, zona), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllByPeriodoIdAndZona(periodoId, zona));
 	}
 
 	@GetMapping("/{prefijoId}/{facturaId}")
 	public ResponseEntity<Factura> findByFactura(@PathVariable Integer prefijoId, @PathVariable Long facturaId) {
-		return new ResponseEntity<>(service.findByFactura(prefijoId, facturaId), HttpStatus.OK);
+		return ResponseEntity.ok(service.findByFactura(prefijoId, facturaId));
 	}
 
 	@PostMapping("/deuda/clientes/{periodoId}")
 	public ResponseEntity<List<Factura>> findAllDeudaByPeriodoIdAndClienteIds(
 			@PathVariable Integer periodoId,
 			@RequestBody List<Long> clienteIds) {
-		return new ResponseEntity<>(
-			service.findAllDeudaByPeriodoIdAndClienteIds(periodoId, clienteIds), 
-			HttpStatus.OK);
+		return ResponseEntity.ok(
+			service.findAllDeudaByPeriodoIdAndClienteIds(periodoId, clienteIds));
 	}
 
 	@PostMapping("/uniques")
 	public ResponseEntity<List<Factura>> findAllByUniqueIdIn(
 			@RequestBody List<Long> uniqueIds) {
-		return new ResponseEntity<>(
-			service.findAllByUniqueIdIn(uniqueIds), 
-			HttpStatus.OK);
+		return ResponseEntity.ok(
+			service.findAllByUniqueIdIn(uniqueIds));
 	}
 
 	@GetMapping("/deuda/print/{clienteId}/{periodoIdReferencia}")
 	public ResponseEntity<List<Factura>> findAllByDeudaPrint(
 			@PathVariable Long clienteId,
 			@PathVariable Integer periodoIdReferencia) {
-		return new ResponseEntity<>(
-			service.findAllByDeudaPrint(clienteId, periodoIdReferencia), 
-			HttpStatus.OK);
+		return ResponseEntity.ok(
+			service.findAllByDeudaPrint(clienteId, periodoIdReferencia));
 	}
 
 }

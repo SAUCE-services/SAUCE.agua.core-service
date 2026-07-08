@@ -5,6 +5,33 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-08
+
+### Added
+- New domain `operador` (operator) with full hexagonal architecture (CRUD)
+- New domain `posicionIva` (VAT position) with full hexagonal architecture (CRUD)
+- Electronic invoice generation via AFIP Web Services (`FacturacionElectronicaService`, `FacturacionAfipClient`)
+- PDF invoice generation with barcode/QR support (`FacturaPdfService`, ZXing `core` 3.5.4)
+- JSON serialization utility (`Jsonifyable` interface)
+- `MakeFacturaController` endpoint for AFIP electronic invoice creation
+- Spring Cloud OpenFeign for declarative HTTP clients (`spring-cloud-starter-openfeign`)
+- OpenJSON library for JSON processing (`openjson` 1.0.13)
+
+### Changed
+- **Migration to hexagonal architecture (ports & adapters)** for domains: `clienteDato`, `medidor`, `periodo`, `tipoNotificacion`
+- Refactored controllers: replaced `new ResponseEntity<>(..., HttpStatus.OK)` with `ResponseEntity.ok(...)`
+- Replaced `@Autowired` field injection with `@RequiredArgsConstructor` + constructor injection across controllers and services
+- Enhanced `ConsumoService` and `DgeFileService` logic
+- Updated `Periodo` model and entity types for improved date handling
+- Repository method `findAllByFecha` renamed from `findAllByFechas` in `IPeriodoPagoRepository`
+
+### Removed
+- Legacy service classes: `ClienteDatoService`, `MedidorService`, `PeriodoService`, `TipoNotificacionService`
+- Legacy controller classes: `ClienteDatoController`, `MedidorController`, `PeriodoController`, `TipoNotificacionController`
+- Legacy model classes: `ClienteDato`, `Medidor`, `TipoNotificacion`
+- Legacy repository classes: `ClienteDatoRepository`, `MedidorRepository`, `PeriodoRepository`, `TipoNotificacionRepository`
+- Legacy exception classes: `ClienteDatoException`, `MedidorException`, `TipoNotificacionException`
+
 ## [1.0.3] - 2026-07-06
 
 ### Changed

@@ -45,104 +45,102 @@ public class ClienteController {
 
 	@PostMapping("/search")
 	public ResponseEntity<List<ClienteSearch>> findAllSearch(@RequestBody List<String> chain) {
-		return new ResponseEntity<>(service.findAllSearch(chain.get(0)), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllSearch(chain.get(0)));
 	}
 
 	@GetMapping("/bycliente/{clienteId}")
 	public ResponseEntity<List<Cliente>> findAllByClienteId(@PathVariable Long clienteId) {
-		return new ResponseEntity<>(service.findAllByClienteId(clienteId), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllByClienteId(clienteId));
 	}
 
 	@GetMapping("/activos/{byname}")
 	public ResponseEntity<List<Cliente>> findAllActivos(@PathVariable Boolean byname) {
-		return new ResponseEntity<>(service.findAllActivos(byname), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivos(byname));
 	}
 
 	@GetMapping("/activos2lectura/{zona}/{ruta}")
 	public ResponseEntity<List<Cliente>> findAllActivos2Lectura(@PathVariable Integer zona,
 			@PathVariable Integer ruta) {
-		return new ResponseEntity<>(service.findAllActivos2Lectura(zona, ruta), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivos2Lectura(zona, ruta));
 	}
 
 	@GetMapping("/activosbyzona")
 	public ResponseEntity<List<Cliente>> findAllActivosByZona() {
-		return new ResponseEntity<>(service.findAllActivosByZona(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosByZona());
 	}
 
 	@GetMapping("/activosbyruta/{zona}")
 	public ResponseEntity<List<Cliente>> findAllActivosByRuta(@PathVariable Integer zona) {
-		return new ResponseEntity<>(service.findAllActivosByRuta(zona), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosByRuta(zona));
 	}
 
 	@GetMapping("/activosmedibles")
 	public ResponseEntity<List<Cliente>> findAllActivosMedibles() {
-		return new ResponseEntity<>(service.findAllActivosMedibles(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosMedibles());
 	}
 
 	@GetMapping("/activosbyzonaruta/{zona}/{ruta}")
 	public ResponseEntity<List<Cliente>> findAllActivosByZonaRuta(@PathVariable Integer zona,
 			@PathVariable Integer ruta) {
-		return new ResponseEntity<>(service.findAllActivosByZonaRuta(zona, ruta), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosByZonaRuta(zona, ruta));
 	}
 
 	@GetMapping("/activosbyzonarutaotros/{zona}/{ruta}")
 	public ResponseEntity<List<Cliente>> findAllActivosByZonaRutaOtros(@PathVariable Integer zona,
 			@PathVariable Integer ruta) {
-		return new ResponseEntity<>(service.findAllActivosByZonaRutaOtros(zona, ruta), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosByZonaRutaOtros(zona, ruta));
 	}
 
 	@GetMapping("/activosconcuotafija")
 	public ResponseEntity<List<Cliente>> findAllActivosConCuotaFija() {
-		return new ResponseEntity<>(service.findAllActivosConCuotaFija(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosConCuotaFija());
 	}
 
 	@GetMapping("/activosconmedidor")
 	public ResponseEntity<List<ActivoConMedidor>> findAllActivosConMedidor() {
-		return new ResponseEntity<>(service.findAllActivosConMedidor(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosConMedidor());
 	}
 
 	@GetMapping("/zona/{zona}")
 	public ResponseEntity<List<Cliente>> findAllActivosZona(@PathVariable Integer zona) {
-		return new ResponseEntity<>(service.findAllActivosZona(zona), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosZona(zona));
 	}
 
 	@GetMapping("/rango/{clienteIddesde}/{clienteIdhasta}")
 	public ResponseEntity<List<Cliente>> findAllActivosRango(@PathVariable Long clienteIddesde,
 			@PathVariable Long clienteIdhasta) {
-		return new ResponseEntity<>(service.findAllActivosRango(clienteIddesde, clienteIdhasta),
-				HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllActivosRango(clienteIddesde, clienteIdhasta));
 	}
 
 	@GetMapping("/sociosactivosconmedidor")
 	public ResponseEntity<List<SocioActivoConMedidor>> findAllSociosActivosConMedidor() {
-		return new ResponseEntity<>(service.findAllSociosActivosConMedidor(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllSociosActivosConMedidor());
 	}
 
 	@GetMapping("/sociosactivos")
 	public ResponseEntity<List<SocioActivo>> findAllSociosActivos() {
-		return new ResponseEntity<>(service.findAllSociosActivos(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllSociosActivos());
 	}
 
 	@GetMapping("/sociosactivosconcuotafija")
 	public ResponseEntity<List<SocioActivoConCuotaFija>> findAllSociosActivosConCuotaFija() {
-		return new ResponseEntity<>(service.findAllSociosActivosConCuotaFija(),
-				HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllSociosActivosConCuotaFija());
 	}
 
 	@GetMapping("/deudoresplancorte")
 	public ResponseEntity<List<DeudorPlanCorte>> findAllDeudoresPlanCorte() {
-		return new ResponseEntity<>(service.findAllDeudoresPlanCorte(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllDeudoresPlanCorte());
 	}
 
 	@GetMapping("/deudoresfactura60dias")
 	public ResponseEntity<List<ICliente>> findAllDeudoresFactura60Dias() {
-		return new ResponseEntity<>(service.findAllDeudoresFactura60Dias(), HttpStatus.OK);
+		return ResponseEntity.ok(service.findAllDeudoresFactura60Dias());
 	}
 	
 	@GetMapping("/{uniqueId}")
 	public ResponseEntity<Cliente> findByUniqueId(@PathVariable Long uniqueId) {
 		try {
-			return new ResponseEntity<>(service.findByUniqueId(uniqueId), HttpStatus.OK);
+			return ResponseEntity.ok(service.findByUniqueId(uniqueId));
 		} catch (ClienteException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -151,7 +149,7 @@ public class ClienteController {
 	@GetMapping("/lastbyclienteId/{clienteId}")
 	public ResponseEntity<Cliente> findLastByClienteId(@PathVariable Long clienteId) {
 		try {
-			return new ResponseEntity<>(service.findLastByClienteId(clienteId), HttpStatus.OK);
+			return ResponseEntity.ok(service.findLastByClienteId(clienteId));
 		} catch (ClienteException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -160,7 +158,7 @@ public class ClienteController {
 	@GetMapping("/lastcliente")
 	public ResponseEntity<Cliente> findLastCliente() {
 		try {
-			return new ResponseEntity<>(service.findLastCliente(), HttpStatus.OK);
+			return ResponseEntity.ok(service.findLastCliente());
 		} catch (ClienteException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -169,7 +167,7 @@ public class ClienteController {
 	@GetMapping("/nextbyclienteId/{clienteId}")
 	public ResponseEntity<ClienteRecorrido> findNextCliente(@PathVariable Long clienteId) {
 		try {
-			return new ResponseEntity<>(service.findNextCliente(clienteId), HttpStatus.OK);
+			return ResponseEntity.ok(service.findNextCliente(clienteId));
 		} catch (ClienteException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -177,12 +175,12 @@ public class ClienteController {
 	
 	@PostMapping("/")
 	public ResponseEntity<Cliente> add(@RequestBody Cliente cliente) {
-		return new ResponseEntity<>(service.add(cliente), HttpStatus.OK);
+		return ResponseEntity.ok(service.add(cliente));
 	}
 	
 	@PutMapping("/{uniqueId}")
 	public ResponseEntity<Cliente> update(@RequestBody Cliente cliente, @PathVariable Long uniqueId) {
-		return new ResponseEntity<>(service.update(cliente, uniqueId), HttpStatus.OK);
+		return ResponseEntity.ok(service.update(cliente, uniqueId));
 	}
 
 }

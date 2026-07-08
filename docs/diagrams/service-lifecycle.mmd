@@ -6,6 +6,9 @@ stateDiagram-v2
     RegistrandoEnConsul --> Error: Fallo de registro
     Listo --> ProcesandoPeticiones: Petición entrante
     ProcesandoPeticiones --> Listo: Respuesta enviada
+    ProcesandoPeticiones --> FacturandoElectronico: Facturación AFIP
+    FacturandoElectronico --> Listo: CAE obtenido
+    FacturandoElectronico --> Error: Fallo AFIP
     ProcesandoPeticiones --> Error: Excepción
     Error --> [*]: Reinicio manual
     Error --> Recuperando: Auto-recuperación

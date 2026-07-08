@@ -6,6 +6,7 @@
 [![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.1.2-blue.svg)](https://spring.io/projects/spring-cloud)
 [![Maven](https://img.shields.io/badge/Maven-3.8.8-red.svg)](https://maven.apache.org/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
+[![Hexagonal Architecture](https://img.shields.io/badge/Architecture-Hexagonal-purple.svg)](https://alistair.cockburn.us/hexagonal-architecture/)
 
 Servicio core para la gestión de servicios de agua, parte del ecosistema SAUCE.
 
@@ -20,14 +21,26 @@ Servicio core para la gestión de servicios de agua, parte del ecosistema SAUCE.
 - OpenPDF 3.0.5
 - SpringDoc OpenAPI 3.0.3
 - Caffeine Cache
+- Spring Cloud OpenFeign
+- ZXing (barcode/QR generation)
+
+## Arquitectura
+
+El proyecto sigue una **Arquitectura Hexagonal** (puertos y adaptadores) para los dominios principales, separando la lógica de negocio de los detalles de infraestructura.
 
 ## Características
 
 - Gestión de clientes y facturación
 - Gestión de volúmenes de clientes
+- Gestión de medidores y operadores
+- Gestión de períodos y posiciones de IVA
 - Validación de montos máximos en facturación
+- **Facturación electrónica AFIP** (Web Services)
+- **Generación de PDF** de facturas con códigos de barras/QR
 - API REST con documentación OpenAPI
 - Manejo de excepciones estandarizado
+- Registro y descubrimiento de servicios con Consul
+- Clientes HTTP declarativos con OpenFeign
 
 ## Requisitos
 
@@ -45,6 +58,8 @@ Servicio core para la gestión de servicios de agua, parte del ecosistema SAUCE.
 ## Documentación
 
 La documentación de la API está disponible en `/swagger-ui.html` cuando la aplicación está en ejecución.
+
+La documentación del proyecto (diagramas, dependencias, milestones) se genera automáticamente mediante GitHub Actions y se publica en GitHub Pages.
 
 ## Contribución
 

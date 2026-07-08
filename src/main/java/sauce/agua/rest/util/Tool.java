@@ -52,4 +52,11 @@ public class Tool {
 		return interesCalculado;
 	}
 
+	public static OffsetDateTime stringDDMMYYYY2OffsetDateTime(String date) {
+		int day = Integer.parseInt(date.substring(0, 2));
+		int month = Integer.parseInt(date.substring(2, 4));
+		int year = Integer.parseInt(date.substring(4, 8));
+		return OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC);
+	}
+
 }

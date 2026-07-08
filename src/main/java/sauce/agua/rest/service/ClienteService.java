@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -45,37 +46,19 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ClienteService {
 
-	@Autowired
-	private ClienteRepository repository;
-
-	@Autowired
-	private IClienteSearchRepository clientesearchrepository;
-
-	@Autowired
-	private IClienteRecorridoRepository clienterecorridorepository;
-
-	@Autowired
-	private IActivoConMedidorRepository activoconmedidorrepository;
-
-	@Autowired
-	private ISocioActivoRepository socioactivorepository;
-
-	@Autowired
-	private ISocioActivoConMedidorRepository socioactivoconmedidorrepository;
-
-	@Autowired
-	private ISocioActivoConCuotaFijaRepository socioactivoconcuotafijarepository;
-
-	@Autowired
-	private IDeudorPlanCorteRepository deudorplancorterepository;
-
-	@Autowired
-	private IDeudorFactura60DiasRepository deudorfactura60diasrepository;
-
-	@Autowired
-	private IDeudorFactura2Repository deudorfactura2repository;
+	private final ClienteRepository repository;
+	private final IClienteSearchRepository clientesearchrepository;
+	private final IClienteRecorridoRepository clienterecorridorepository;
+	private final IActivoConMedidorRepository activoconmedidorrepository;
+	private final ISocioActivoRepository socioactivorepository;
+	private final ISocioActivoConMedidorRepository socioactivoconmedidorrepository;
+	private final ISocioActivoConCuotaFijaRepository socioactivoconcuotafijarepository;
+	private final IDeudorPlanCorteRepository deudorplancorterepository;
+	private final IDeudorFactura60DiasRepository deudorfactura60diasrepository;
+	private final IDeudorFactura2Repository deudorfactura2repository;
 
 	public List<Cliente> findAllByClienteId(Long clienteId) {
 		return repository.findAllByClienteId(clienteId, Sort.by("fechaalta").ascending());

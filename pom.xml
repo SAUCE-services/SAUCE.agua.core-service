@@ -11,7 +11,7 @@
     </parent>
     <groupId>ar.com</groupId>
     <artifactId>sauce.agua.rest</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
     <name>SAUCE.agua.core-service</name>
     <description>Core service for water utility management within the SAUCE ecosystem</description>
 
@@ -80,6 +80,20 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.openjson</groupId>
+            <artifactId>openjson</artifactId>
+            <version>1.0.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.4</version>
         </dependency>
 
         <dependency>

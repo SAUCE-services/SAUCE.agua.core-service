@@ -1,15 +1,27 @@
 sequenceDiagram
     participant Client as Cliente
-    participant Controller as Controller
-    participant Service as Service
-    participant Repository as Repository
+    participant Controller as Controller (REST)
+    participant UseCase as UseCase (In Port)
+    participant Service as Domain Service
+    participant Repository as Repository (Out Port)
+    participant JpaAdapter as JPA Adapter
     participant DB as Base de Datos
+    participant Afip as AFIP WS (Facturación Electrónica)
 
     Client->>Controller: HTTP Request (GET/POST/PUT/DELETE)
-    Controller->>Service: Llamada a método de negocio
-    Service->>Repository: Consulta/Actualización de datos
-    Repository->>DB: SQL Query
-    DB-->>Repository: Resultado
-    Repository-->>Service: Entidad/DTO
-    Service-->>Controller: Respuesta procesada
+    Controller->>UseCase: Llamada a caso de uso
+    UseCase->>Service: Ejecuta lógica de negocio
+    Service->>Repository: Consulta/ Persistencia (Out Port)
+    Repository->>JpaAdapter: Implementación JPA
+    JpaAdapter->>DB: SQL Query
+    DB-->>JpaAdapter: Resultado
+    JpaAdapter-->>Repository: Entidad mapeada
+    Repository-->>Service: Modelo de dominio
+    Service-->>UseCase: Resultado procesado
+    UseCase-->>Controller: DTO de respuesta
     Controller-->>Client: HTTP Response (JSON)
+
+    alt Facturación Electrónica
+        Service->>Afip: Envío comprobante (Feign Client)
+        Afip-->>Service: CAE / Resultado AFIP
+    end

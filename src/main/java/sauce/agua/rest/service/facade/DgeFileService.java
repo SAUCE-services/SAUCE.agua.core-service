@@ -14,18 +14,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import sauce.agua.rest.exception.ClienteVolumenException;
+import sauce.agua.rest.hexagonal.periodo.domain.model.Periodo;
 import sauce.agua.rest.model.Factura;
-import sauce.agua.rest.model.Periodo;
-import sauce.agua.rest.service.ClienteVolumenService;
+import sauce.agua.rest.hexagonal.periodo.infrastructure.persistence.entity.PeriodoEntity;
 import sauce.agua.rest.service.FacturaService;
-import sauce.agua.rest.service.MedidorService;
-import sauce.agua.rest.service.PeriodoService;
+import sauce.agua.rest.hexagonal.medidor.application.service.MedidorService;
+import sauce.agua.rest.hexagonal.periodo.application.service.PeriodoService;
 import lombok.extern.slf4j.Slf4j;
+import sauce.agua.rest.util.Jsonifier;
 
 /**
  * @author daniel
@@ -44,7 +44,7 @@ public class DgeFileService {
 
     public String generate(Integer periodoId, List<Long> clienteIds) throws IOException {
 		Periodo periodo = periodoService.findByPeriodoId(periodoId);
-		log.debug("Periodo -> {}", periodo.jsonify());
+		log.debug("Periodo -> {}", Jsonifier.builder(periodo).build());
 		OffsetDateTime fecha = periodo.getFechaInicio().plusHours(3);
 		int anho = fecha.getYear();
 		Integer mes = fecha.getMonthValue();

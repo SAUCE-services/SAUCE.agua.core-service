@@ -2,7 +2,7 @@ package sauce.agua.rest.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import sauce.agua.rest.util.Jsonifier;
+import sauce.agua.rest.util.Jsonifyable;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ClienteVolumen extends Auditable implements Serializable {
+public class ClienteVolumen extends Auditable implements Serializable, Jsonifyable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,5 @@ public class ClienteVolumen extends Auditable implements Serializable {
     private String medidorIdAnterior;
     private Long estadoAnterior;
     private Long consumido;
-
-    public String jsonify() {
-        return Jsonifier.builder(this).build();
-    }
 
 }

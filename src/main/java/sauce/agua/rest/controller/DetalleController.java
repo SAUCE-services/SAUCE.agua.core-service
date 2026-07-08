@@ -1,6 +1,5 @@
 package sauce.agua.rest.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,7 @@ public class DetalleController {
 
     @GetMapping("/factura/{prefijoId}/{facturaId}")
     public ResponseEntity<List<Detalle>> findAllByFactura(@PathVariable Integer prefijoId, @PathVariable Long facturaId) {
-        return new ResponseEntity<>(service.findAllByFactura(prefijoId, facturaId), HttpStatus.OK);
+        return ResponseEntity.ok(service.findAllByFactura(prefijoId, facturaId));
     }
 
 }

@@ -17,12 +17,13 @@ import jakarta.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import sauce.agua.rest.hexagonal.periodo.infrastructure.persistence.entity.PeriodoEntity;
 import sauce.agua.rest.model.pk.FacturaPk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import sauce.agua.rest.util.Jsonifier;
+import sauce.agua.rest.util.Jsonifyable;
 
 /**
  * @author daniel
@@ -34,7 +35,7 @@ import sauce.agua.rest.util.Jsonifier;
 @IdClass(value = FacturaPk.class)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Factura extends Auditable implements Serializable {
+public class Factura extends Auditable implements Serializable, Jsonifyable {
 	/**
 	 * 
 	 */
@@ -83,9 +84,6 @@ public class Factura extends Auditable implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "periodoId", insertable = false, updatable = false)
-	private Periodo periodo;
+	private PeriodoEntity periodo;
 
-    public String jsonify() {
-        return Jsonifier.builder(this).build();
-    }
 }

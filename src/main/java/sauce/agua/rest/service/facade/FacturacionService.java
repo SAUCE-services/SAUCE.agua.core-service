@@ -14,17 +14,17 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import sauce.agua.rest.exception.PeriodoException;
+import sauce.agua.rest.hexagonal.periodo.application.exception.PeriodoException;
 import sauce.agua.rest.exception.RubroException;
 import sauce.agua.rest.model.Detalle;
 import sauce.agua.rest.model.Factura;
 import sauce.agua.rest.model.Novedad;
-import sauce.agua.rest.model.Periodo;
+import sauce.agua.rest.hexagonal.periodo.infrastructure.persistence.entity.PeriodoEntity;
 import sauce.agua.rest.model.Rubro;
 import sauce.agua.rest.repository.DetalleRepository;
 import sauce.agua.rest.repository.FacturaRepository;
 import sauce.agua.rest.repository.NovedadRepository;
-import sauce.agua.rest.repository.PeriodoRepository;
+import sauce.agua.rest.hexagonal.periodo.infrastructure.persistence.repository.JpaPeriodoRepository;
 import sauce.agua.rest.repository.RubroRepository;
 import sauce.agua.rest.util.Tool;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +38,13 @@ import lombok.extern.slf4j.Slf4j;
 public class FacturacionService {
 
 	private final RubroRepository rubrorepository;
-	private final PeriodoRepository periodorepository;
+	private final JpaPeriodoRepository periodorepository;
 	private final FacturaRepository facturarepository;
 	private final DetalleRepository detallerepository;
 	private final NovedadRepository novedadrepository;
 
 	public FacturacionService(RubroRepository rubrorepository,
-							  PeriodoRepository periodorepository,
+							  JpaPeriodoRepository periodorepository,
 							  FacturaRepository facturarepository,
 							  DetalleRepository detallerepository,
 							  NovedadRepository novedadrepository) {
@@ -147,7 +147,7 @@ public class FacturacionService {
 	public String recalculateCodigoPagoFacil(Factura factura) {
 		log.debug("Processing FacturacionService.recalculateCodigoPagoFacil");
 		logFactura(factura);
-		Periodo periodo = periodorepository.findByPeriodoId(factura.getPeriodoId()).orElseThrow(() -> new PeriodoException(factura.getPeriodoId()));
+		PeriodoEntity periodo = periodorepository.findByPeriodoId(factura.getPeriodoId()).orElseThrow(() -> new PeriodoException(factura.getPeriodoId()));
 		logPeriodo(periodo);
 
 		String string = "";
@@ -191,7 +191,7 @@ public class FacturacionService {
 		return string;
 	}
 
-	private void logPeriodo(Periodo periodo) {
+	private void logPeriodo(PeriodoEntity periodo) {
 		try {
 			log.debug("Periodo: {}", JsonMapper
 					.builder()
